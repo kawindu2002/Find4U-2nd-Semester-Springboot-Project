@@ -1,0 +1,2368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <title>Find4U - Advanced Missing Persons Platform</title>
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+      <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+      <style>
+          :root {
+              --bg-primary: #0a0a0a;
+              --bg-secondary: #111111;
+              --bg-tertiary: #1a1a1a;
+              --bg-card: #1e1e1e;
+              --bg-hover: #252525;
+              --bg-highlight: rgba(59, 130, 246, 0.05);
+              --border-primary: #2a2a2a;
+              --border-secondary: #333333;
+              --text-primary: #ffffff;
+              --text-secondary: #b3b3b3;
+              --text-muted: #666666;
+              --accent-primary: #3b82f6;
+              --accent-secondary: #8b5cf6;
+              --accent-success: #10b981;
+              --accent-warning: #f59e0b;
+              --accent-danger: #ef4444;
+              --accent-info: #06b6d4;
+              --gradient-primary: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+              --gradient-secondary: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+              --gradient-success: linear-gradient(135deg, #059669 0%, #10b981 100%);
+              --gradient-danger: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+              --gradient-warning: linear-gradient(135deg, #d97706 0%, #f59e0b 100%);
+              --gradient-info: linear-gradient(135deg, #0891b2 0%, #06b6d4 100%);
+              --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+              --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+              --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+              --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6);
+              --shadow-glow: 0 0 20px rgba(59, 130, 246, 0.3);
+              --border-radius: 12px;
+              --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          }
+
+          html {
+              scroll-behavior: smooth;
+          }
+
+          * {
+              margin: 0;
+              padding: 0;
+              box-sizing: border-box;
+          }
+
+          body {
+              font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+              background: var(--bg-primary);
+              color: var(--text-primary);
+              line-height: 1.6;
+              overflow-x: hidden;
+          }
+
+          section {
+              scroll-margin-top: 80px;
+          }
+
+          a{
+              text-decoration: none;
+          }
+
+          /* Scrollbar Styling */
+          ::-webkit-scrollbar {
+              width: 8px;
+          }
+
+          ::-webkit-scrollbar-track {
+              background: var(--bg-secondary);
+          }
+
+          ::-webkit-scrollbar-thumb {
+              background: var(--border-secondary);
+              border-radius: 4px;
+          }
+
+          ::-webkit-scrollbar-thumb:hover {
+              background: var(--accent-primary);
+          }
+
+          /* Advanced Navbar */
+          .navbar-dark {
+              background: rgba(10, 10, 10, 0.95) !important;
+              backdrop-filter: blur(20px);
+              border-bottom: 1px solid var(--border-primary);
+              transition: var(--transition);
+          }
+
+          .navbar-brand {
+              font-weight: 800;
+              font-size: 1.5rem;
+              background: var(--gradient-primary);
+              -webkit-background-clip: text;
+              -webkit-text-fill-color: transparent;
+              background-clip: text;
+          }
+
+          .nav-link {
+              color: var(--text-secondary) !important;
+              font-weight: 500;
+              position: relative;
+              transition: var(--transition);
+          }
+
+          .nav-link::after {
+              content: '';
+              position: absolute;
+              width: 0;
+              height: 2px;
+              bottom: -5px;
+              left: 50%;
+              background: var(--gradient-primary);
+              transition: var(--transition);
+              transform: translateX(-50%);
+          }
+
+          .nav-link:hover {
+              color: var(--text-primary) !important;
+          }
+
+          .nav-link:hover::after {
+              width: 100%;
+          }
+
+          .nav-link.active {
+              color: var(--text-primary) !important;
+          }
+
+          .notification-btn {
+              background: none;
+              border: none;
+              color: var(--text-secondary);
+              font-size: 1.2rem;
+              padding: 8px;
+              border-radius: 8px;
+              transition: var(--transition);
+              position: relative;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+          }
+
+          .notification-btn:hover {
+              color: var(--accent-primary);
+              background: rgba(59, 130, 246, 0.1);
+              transform: translateY(-2px);
+          }
+
+          .notification-badge {
+              position: absolute;
+              top: -6px;
+              right: -6px;
+              background: var(--gradient-danger);
+              color: white;
+              font-size: 10px;
+              font-weight: 600;
+              padding: 3px 6px;
+              border-radius: 50%;
+              line-height: 1;
+              box-shadow: var(--shadow-md);
+              animation: pulse 2s infinite;
+          }
+
+          @keyframes pulse {
+              0%, 100% { transform: scale(1); }
+              50% { transform: scale(1.1); }
+          }
+
+          .profile-btn {
+              background: rgba(59, 130, 246, 0.1);
+              border: 1px solid rgba(59, 130, 246, 0.3);
+              border-radius: 50%;
+              width: 40px;
+              height: 40px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              transition: var(--transition);
+          }
+
+          .profile-btn:hover {
+              background: rgba(59, 130, 246, 0.2);
+              border-color: var(--accent-primary);
+              transform: scale(1.1);
+              box-shadow: var(--shadow-glow);
+          }
+
+          .profile-btn i {
+              color: var(--accent-primary);
+              font-size: 1.1rem;
+              position: relative;
+              z-index: 1000;
+          }
+
+          .navbar-toggler {
+              border: none;
+              padding: 8px;
+              border-radius: 8px;
+              transition: var(--transition);
+          }
+
+          .navbar-toggler:hover {
+              background: var(--bg-hover);
+          }
+
+          .dropdown-menu {
+              min-width: 280px;
+              max-width: 320px;
+              border-radius: var(--border-radius);
+              padding: 0;
+              background: var(--bg-card);
+              border: 1px solid var(--border-primary);
+              box-shadow: var(--shadow-xl);
+              backdrop-filter: blur(20px);
+              animation: fadeInUp 0.3s ease-out;
+              overflow: hidden;
+          }
+
+          @keyframes fadeInUp {
+              from {
+                  opacity: 0;
+                  transform: translateY(10px);
+              }
+              to {
+                  opacity: 1;
+                  transform: translateY(0);
+              }
+          }
+
+          .btn-outline-primary {
+              border: 2px solid var(--accent-primary);
+              color: var(--accent-primary);
+              background: transparent;
+              font-weight: 600;
+              padding: 8px 24px;
+              border-radius: 50px;
+              transition: var(--transition);
+          }
+
+          .btn-outline-primary:hover {
+              background: var(--accent-primary);
+              color: white;
+              box-shadow: var(--shadow-glow);
+              transform: translateY(-2px);
+          }
+
+          .dropdown-header {
+              padding: 0.5rem 1.5rem;
+              font-weight: 600;
+              border-bottom: 1px solid var(--border-primary);
+              margin-bottom: 0;
+          }
+
+          .dropdown-header .fw-bold {
+              color: var(--text-primary);
+              font-size: 1rem;
+              margin-bottom: 0.25rem;
+          }
+
+          .dropdown-header .text-muted {
+              color: var(--text-muted) !important;
+              font-size: 0.85rem;
+          }
+
+          .dropdown-item {
+              display: flex;
+              align-items: center;
+              gap: 12px;
+              padding: 12px 1.5rem;
+              color: var(--text-secondary);
+              text-decoration: none;
+              transition: var(--transition);
+              position: relative;
+              overflow: hidden;
+          }
+
+          .dropdown-item::before {
+              content: '';
+              position: absolute;
+              top: 0;
+              left: -100%;
+              width: 100%;
+              height: 100%;
+              background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+              transition: var(--transition);
+              transform: translateX(-50%);
+          }
+
+          .dropdown-item:hover::before {
+              left: 100%;
+          }
+
+          .dropdown-item:hover {
+              background: var(--bg-hover);
+              color: var(--text-primary);
+              transform: translateX(4px);
+          }
+
+          .dropdown-item i {
+              width: 20px;
+              text-align: center;
+              font-size: 1rem;
+              transition: var(--transition);
+          }
+
+          .dropdown-item:hover i {
+              color: var(--accent-primary);
+              transform: scale(1.1);
+          }
+
+          .notification-dropdown-item {
+              display: flex;
+              align-items: flex-start;
+              gap: 12px;
+              padding: 12px 1.5rem;
+              color: var(--text-secondary);
+              text-decoration: none;
+              transition: var(--transition);
+              position: relative;
+              overflow: hidden;
+          }
+
+          .notification-dropdown-item::before {
+              content: '';
+              position: absolute;
+              top: 0;
+              left: -100%;
+              width: 100%;
+              height: 100%;
+              background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+              transition: var(--transition);
+          }
+
+          .notification-dropdown-item:hover::before {
+              left: 100%;
+          }
+
+          .notification-dropdown-item:hover {
+              background: var(--bg-hover);
+              color: var(--text-primary);
+              transform: translateX(4px);
+          }
+
+          .notification-dropdown-item.unread {
+              background: rgba(59, 130, 246, 0.05);
+              border-left: 3px solid var(--accent-primary);
+          }
+
+          .notification-content {
+              flex: 1;
+          }
+
+          .notification-title {
+              color: var(--text-primary);
+              font-weight: 600;
+              margin-bottom: 0.25rem;
+              display: flex;
+              align-items: center;
+              gap: 0.5rem;
+          }
+
+          .notification-text {
+              color: var(--text-secondary);
+              font-size: 0.9rem;
+              margin-bottom: 0.5rem;
+              line-height: 1.4;
+          }
+
+          .notification-time {
+              color: var(--text-muted);
+              font-size: 0.8rem;
+          }
+
+          .notification-icon {
+              width: 20px;
+              height: 20px;
+              border-radius: 50%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-size: 0.8rem;
+              flex-shrink: 0;
+          }
+
+          .notification-icon.danger {
+              background: rgba(239, 68, 68, 0.1);
+              color: var(--accent-danger);
+          }
+
+          .notification-icon.warning {
+              background: rgba(245, 158, 11, 0.1);
+              color: var(--accent-warning);
+          }
+
+          .notification-icon.success {
+              background: rgba(16, 185, 129, 0.1);
+              color: var(--accent-success);
+          }
+
+          .notification-icon.primary {
+              background: rgba(59, 130, 246, 0.1);
+              color: var(--accent-primary);
+          }
+
+          .dropdown-actions {
+              padding: 0.15rem 1rem;
+              background: var(--bg-secondary);
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              border-top: 1px solid var(--border-primary);
+          }
+
+          .dropdown-actions a {
+              color: var(--accent-primary);
+              text-decoration: none;
+              font-size: 0.9rem;
+              font-weight: 500;
+              transition: var(--transition);
+              padding: 0.5rem;
+              border-radius: 6px;
+              cursor: pointer;
+          }
+
+          .dropdown-actions a:hover {
+              background: rgba(59, 130, 246, 0.1);
+              color: var(--accent-secondary);
+          }
+
+          .dropdown-actions a.text-danger {
+              color: var(--accent-danger);
+          }
+
+          .dropdown-actions a.text-danger:hover {
+              background: rgba(239, 68, 68, 0.1);
+              color: var(--accent-danger);
+          }
+
+          .dropdown-divider {
+              border-color: var(--border-primary);
+              margin: 0;
+          }
+
+          .badge {
+              background: var(--gradient-primary);
+              color: white;
+              font-size: 0.7rem;
+              padding: 0.25rem 0.5rem;
+              border-radius: 20px;
+              margin-left: auto;
+          }
+
+          .empty-state {
+              padding: 2rem 1.5rem;
+              text-align: center;
+              color: var(--text-muted);
+              display: none;
+          }
+
+          .empty-state i {
+              font-size: 2.5rem;
+              margin-bottom: 1rem;
+              color: var(--border-secondary);
+          }
+
+          .empty-state h6 {
+              color: var(--text-secondary);
+              margin-bottom: 0.5rem;
+          }
+
+          .notification-settings-link {
+              display: flex;
+              align-items: center;
+              gap: 0.5rem;
+              padding: 0.75rem 1.5rem;
+              color: var(--text-secondary);
+              text-decoration: none;
+              transition: var(--transition);
+              border-top: 1px solid var(--border-primary);
+              background: var(--bg-secondary);
+          }
+
+          .notification-settings-link:hover {
+              color: var(--accent-primary);
+              background: var(--bg-hover);
+          }
+
+          .notification-settings-link i {
+              transition: var(--transition);
+          }
+
+          .notification-settings-link:hover i {
+              transform: rotate(30deg);
+          }
+
+          @media (max-width: 768px) {
+              .navbar-nav {
+                  background: var(--bg-card);
+                  border-radius: var(--border-radius);
+                  padding: 1rem;
+                  margin-top: 1rem;
+                  border: 1px solid var(--border-primary);
+              }
+
+              .nav-link {
+                  margin-bottom: 0.5rem;
+              }
+
+              .navbar-collapse {
+                  margin-top: 1rem;
+              }
+
+              .dropdown-menu {
+                  position: fixed !important;
+                  top: 80px !important;
+                  right: 20px !important;
+                  left: auto !important;
+                  width: calc(100% - 40px) !important;
+                  max-width: 400px;
+                  margin-top: 0;
+                  z-index: 1050;
+                  height: 500px;
+                  overflow-y: auto;
+              }
+
+              .sign-in-btn {
+                  width: 100%;
+                  margin-top: 1rem;
+              }
+          }
+
+          @media (min-width: 992px) {
+              .dropdown-menu {
+                  max-height: none !important;
+                  overflow-y: visible !important;
+              }
+
+              .sign-in-btn {
+                  margin-left: 1rem;
+              }
+          }
+
+          .logged-out .profile-section {
+              display: none !important;
+          }
+
+          .logged-out .sign-in-section {
+              display: flex !important;
+          }
+
+          .logged-in .profile-section {
+              display: flex !important;
+          }
+
+          .logged-in .sign-in-section {
+              display: none !important;
+          }
+
+          .btn-primary {
+              background: var(--gradient-primary);
+              border: none;
+              color: white;
+              font-weight: 600;
+              padding: 12px 32px;
+              border-radius: 50px;
+              transition: var(--transition);
+              box-shadow: var(--shadow-md);
+          }
+
+          .btn-primary:hover {
+              transform: translateY(-2px);
+              box-shadow: var(--shadow-xl);
+          }
+
+          /* Hero Section */
+          .hero {
+              padding-top: 180px;
+              min-height: 100vh;
+              position: relative;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              overflow: visible;
+              background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+          }
+
+          .hero::before {
+              content: '';
+              position: absolute;
+              top: 0;
+              left: 0;
+              right: 0;
+              bottom: 0;
+              background: radial-gradient(circle at 30% 20%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+              radial-gradient(circle at 70% 80%, rgba(139, 92, 246, 0.1) 0%, transparent 50%);
+              z-index: 1;
+          }
+
+          .hero-content {
+              position: relative;
+              z-index: 2;
+              text-align: center;
+              animation: fadeInUp 1s ease-out;
+          }
+
+          .hero h1 {
+              font-size: 3.5rem;
+              font-weight: 800;
+              margin-bottom: 1.5rem;
+              background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-primary) 50%, var(--accent-secondary) 100%);
+              -webkit-background-clip: text;
+              -webkit-text-fill-color: transparent;
+              background-clip: text;
+              line-height: 1.2;
+          }
+
+          .hero p {
+              font-size: 1.25rem;
+              color: var(--text-secondary);
+              margin-bottom: 2rem;
+              max-width: 600px;
+              margin-left: auto;
+              margin-right: auto;
+          }
+
+          /* Floating Elements */
+          .floating-element {
+              position: absolute;
+              animation: float 6s ease-in-out infinite;
+          }
+
+          .floating-element:nth-child(1) { top: 20%; left: 10%; animation-delay: 0s; }
+          .floating-element:nth-child(2) { top: 60%; right: 15%; animation-delay: 2s; }
+          .floating-element:nth-child(3) { bottom: 20%; left: 20%; animation-delay: 4s; }
+
+          @keyframes float {
+              0%, 100% { transform: translateY(0px) rotate(0deg); }
+              50% { transform: translateY(-20px) rotate(5deg); }
+          }
+
+          @keyframes fadeInUp {
+              from {
+                  opacity: 0;
+                  transform: translateY(50px);
+              }
+              to {
+                  opacity: 1;
+                  transform: translateY(0);
+              }
+          }
+
+          /* Stats Section */
+          .stats-section {
+              background: var(--bg-secondary);
+              padding: 80px 0;
+              position: relative;
+          }
+
+          .stat-box {
+              background: var(--bg-card);
+              border: 1px solid var(--border-primary);
+              border-radius: var(--border-radius);
+              padding: 2rem;
+              text-align: center;
+              transition: var(--transition);
+              position: relative;
+              overflow: hidden;
+          }
+
+          .stat-box::before {
+              content: '';
+              position: absolute;
+              top: 0;
+              left: -100%;
+              width: 100%;
+              height: 100%;
+              background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+              transition: var(--transition);
+          }
+
+          .stat-box:hover::before {
+              left: 100%;
+          }
+
+          .stat-box:hover {
+              transform: translateY(-10px);
+              box-shadow: var(--shadow-xl);
+              border-color: var(--accent-primary);
+          }
+
+          .stat-box h4 {
+              font-size: 2.5rem;
+              font-weight: 800;
+              margin-bottom: 0.5rem;
+          }
+
+          .stat-box.box1 h4 { color: var(--accent-primary); }
+          .stat-box.box2 h4 { color: var(--accent-success); }
+          .stat-box.box3 h4 { color: var(--accent-danger); }
+
+          .stat-box p {
+              color: var(--text-secondary);
+              margin: 0;
+          }
+
+          /* Cards */
+          .card {
+              background: var(--bg-card);
+              border: 1px solid var(--border-primary);
+              border-radius: var(--border-radius);
+              transition: var(--transition);
+          }
+
+          .card:hover {
+              transform: translateY(-8px);
+              box-shadow: var(--shadow-xl);
+              border-color: var(--accent-primary);
+          }
+
+          .card-body {
+              color: var(--text-primary);
+          }
+
+          .card-hover {
+              background: var(--bg-card);
+              border: 1px solid var(--border-primary);
+              border-radius: var(--border-radius);
+              transition: var(--transition);
+              position: relative;
+              overflow: hidden;
+          }
+
+          .card-hover::before {
+              content: '';
+              position: absolute;
+              top: 0;
+              left: 0;
+              right: 0;
+              height: 3px;
+              background: var(--gradient-primary);
+              transform: scaleX(0);
+              transition: var(--transition);
+          }
+
+          .card-hover:hover::before {
+              transform: scaleX(1);
+          }
+
+          .card-hover:hover {
+              transform: translateY(-8px);
+              box-shadow: var(--shadow-xl);
+              border-color: var(--accent-primary);
+          }
+
+          /* Icon Circles */
+          .icon-circle {
+              width: 60px;
+              height: 60px;
+              background: var(--gradient-primary);
+              border-radius: 50%;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              margin: 0 auto 1rem;
+              font-size: 1.5rem;
+              color: white;
+              box-shadow: var(--shadow-md);
+              transition: var(--transition);
+          }
+
+          .card-hover:hover .icon-circle {
+              transform: scale(1.1) rotate(5deg);
+              box-shadow: var(--shadow-glow);
+          }
+
+          /* Status Badge */
+          .status-badge {
+              background: var(--gradient-danger);
+              color: white;
+              font-size: 0.75rem;
+              font-weight: 600;
+              padding: 4px 12px;
+              border-radius: 20px;
+              box-shadow: var(--shadow-sm);
+          }
+
+          /* Pricing Cards */
+          .plan-card {
+              background: var(--bg-card);
+              border: 2px solid var(--border-primary);
+              border-radius: var(--border-radius);
+              padding: 2rem;
+              transition: var(--transition);
+              position: relative;
+              overflow: hidden;
+          }
+
+          .plan-card.highlighted {
+              border-color: var(--accent-primary);
+              background: linear-gradient(135deg, var(--bg-card) 0%, rgba(59, 130, 246, 0.05) 100%);
+          }
+
+          .plan-card:hover {
+              transform: translateY(-10px);
+              box-shadow: var(--shadow-xl);
+          }
+
+          .recommended-label {
+              background: var(--gradient-primary);
+              color: white;
+              font-size: 0.75rem;
+              font-weight: 600;
+              padding: 4px 16px;
+              border-radius: 20px;
+              display: inline-block;
+              margin-bottom: 1rem;
+              box-shadow: var(--shadow-md);
+          }
+
+          /* Map Container */
+          .map-container {
+              height: 400px;
+              width: 100%;
+              border-radius: var(--border-radius);
+              overflow: hidden;
+              border: 1px solid var(--border-primary);
+              box-shadow: var(--shadow-lg);
+          }
+
+          /* Accordion */
+          .accordion-item {
+              background: var(--bg-card);
+              border: 1px solid var(--border-primary);
+              margin-bottom: 1rem;
+              border-radius: var(--border-radius);
+              overflow: hidden;
+          }
+
+          .accordion-button {
+              background: var(--bg-card);
+              color: var(--text-primary);
+              border: none;
+              font-weight: 600;
+              padding: 1.5rem;
+          }
+
+          .accordion-button:not(.collapsed) {
+              background: var(--gradient-primary);
+              color: white;
+              box-shadow: none;
+          }
+
+          .accordion-body {
+              background: var(--bg-tertiary);
+              color: var(--text-secondary);
+              padding: 1.5rem;
+          }
+
+          /* Community Section */
+          .community-hero {
+              padding: 100px 0;
+              position: relative;
+              overflow: hidden;
+          }
+
+          /* Footer Styles */
+          footer {
+              background: var(--bg-secondary);
+              border-top: 1px solid var(--border-primary);
+              padding: 60px 0 30px;
+          }
+
+          .footer-brand {
+              display: flex;
+              align-items: center;
+              margin-bottom: 20px;
+          }
+
+          .footer-brand-text {
+              font-size: 1.25rem;
+              font-weight: 700;
+              color: var(--text-primary);
+          }
+
+          .footer-description {
+              color: var(--text-secondary);
+              margin-bottom: 24px;
+              line-height: 1.6;
+          }
+
+          .footer-section h6 {
+              color: var(--text-primary);
+              font-weight: 600;
+              margin-bottom: 16px;
+          }
+
+          .footer-section ul {
+              list-style: none;
+              padding: 0;
+              margin: 0;
+          }
+
+          .footer-section ul li {
+              margin-bottom: 8px;
+          }
+
+          .footer-section ul li a {
+              color: var(--text-secondary);
+              text-decoration: none;
+              transition: var(--transition);
+          }
+
+          .footer-section ul li a:hover {
+              color: var(--accent-primary);
+          }
+
+          .footer-social a {
+              color: var(--text-secondary);
+              font-size: 1.2rem;
+              margin-right: 16px;
+              transition: var(--transition);
+          }
+
+          .footer-social a:hover {
+              color: var(--accent-primary);
+              transform: translateY(-2px);
+          }
+
+          .footer-bottom {
+              border-top: 1px solid var(--border-primary);
+              padding-top: 24px;
+              margin-top: 40px;
+              text-align: center;
+              color: var(--text-muted);
+              font-size: 0.9rem;
+          }
+
+          /* Back to Top Button */
+          #backToTopBtn {
+              position: fixed;
+              bottom: 30px;
+              right: 30px;
+              z-index: 1000;
+              background: var(--gradient-primary);
+              color: white;
+              border: none;
+              border-radius: 50%;
+              width: 50px;
+              height: 50px;
+              font-size: 1.25rem;
+              cursor: pointer;
+              box-shadow: var(--shadow-lg);
+              display: none;
+              align-items: center;
+              justify-content: center;
+              transition: var(--transition);
+          }
+
+          #backToTopBtn:hover {
+              transform: translateY(-3px) scale(1.1);
+              box-shadow: var(--shadow-glow);
+          }
+
+          /* Animations */
+          .animate-on-scroll {
+              opacity: 0;
+              transform: translateY(50px);
+              transition: all 0.8s ease-out;
+          }
+
+          .animate-on-scroll.animated {
+              opacity: 1;
+              transform: translateY(0);
+          }
+
+          /* Alert */
+          .alert-primary {
+              background: rgba(59, 130, 246, 0.1);
+              border: 1px solid rgba(59, 130, 246, 0.3);
+              color: var(--accent-primary);
+          }
+
+          /* Text Colors */
+          .text-muted {
+              color: var(--text-muted) !important;
+          }
+
+          .text-secondary {
+              color: var(--text-secondary) !important;
+          }
+
+          /* Responsive Design */
+          @media (max-width: 768px) {
+              .hero h1 {
+                  font-size: 2.5rem;
+              }
+
+              .hero p {
+                  font-size: 1.1rem;
+              }
+
+              .stat-box h4 {
+                  font-size: 2rem;
+              }
+          }
+
+          /* Loading Animation */
+          .loading-spinner {
+              display: inline-block;
+              width: 20px;
+              height: 20px;
+              border: 3px solid rgba(255,255,255,.3);
+              border-radius: 50%;
+              border-top-color: #fff;
+              animation: spin 1s ease-in-out infinite;
+          }
+
+          @keyframes spin {
+              to { transform: rotate(360deg); }
+          }
+
+          /* Pulse Animation */
+          .pulse {
+              animation: pulse 2s infinite;
+          }
+
+          @keyframes pulse {
+              0% { transform: scale(1); }
+              50% { transform: scale(1.05); }
+              100% { transform: scale(1); }
+          }
+
+          /* Custom Scrollbar for Firefox */
+          html {
+              scrollbar-width: thin;
+              scrollbar-color: var(--border-secondary) var(--bg-secondary);
+          }
+
+          /* Loading states */
+          .loading {
+              position: relative;
+              overflow: hidden;
+          }
+
+          .loading::after {
+              content: '';
+              position: absolute;
+              top: 0;
+              right: 0;
+              bottom: 0;
+              left: 0;
+              transform: translateX(-100%);
+              background-image: linear-gradient(
+                      90deg,
+                      rgba(255, 255, 255, 0) 0,
+                      rgba(255, 255, 255, 0.2) 20%,
+                      rgba(255, 255, 255, 0.5) 60%,
+                      rgba(255, 255, 255, 0)
+              );
+              animation: shimmer 2s infinite;
+          }
+
+          @keyframes shimmer {
+              100% {
+                  transform: translateX(100%);
+              }
+          }
+
+          .skeleton {
+              background-color: var(--bg-tertiary);
+              border-radius: 4px;
+              height: 1em;
+              margin-bottom: 0.5rem;
+          }
+
+          .data-loading {
+              text-align: center;
+              padding: 2rem;
+              color: var(--text-secondary);
+          }
+
+          .data-error {
+              text-align: center;
+              padding: 2rem;
+              color: var(--accent-danger);
+          }
+      </style>
+</head>
+<body>
+
+<!-- Advanced Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNavbar">
+      <div class="container">
+            <!-- Brand -->
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                  Find<span style="color: var(--accent-primary);">4</span>U
+            </a>
+
+            <!-- Mobile Toggle -->
+            <button class="navbar-toggler ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu" aria-controls="navmenu" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Mobile Icons (notification & profile) -->
+            <div class="d-flex d-lg-none align-items-center gap-2 ms-auto">
+                  <!-- Notification Dropdown (Mobile) - Only shown when logged in -->
+                  <div class="dropdown profile-section">
+                        <a href="#" class="notification-btn" id="mobileNotifDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="margin-left: 8px;">
+                              <i class="bi bi-bell"></i>
+                              <span class="notification-badge">3</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="mobileNotifDropdown" id="mobileNotificationDropdown">
+                              <!-- Content will be dynamically populated -->
+                        </ul>
+                  </div>
+
+                  <!-- Profile Dropdown (Mobile) - Only shown when logged in -->
+                  <div class="dropdown profile-section">
+                        <a href="#" title="Profile" class="profile-btn" id="mobileDropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
+                              <i class="bi bi-person"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="mobileDropdownUser" id="mobileProfileDropdown">
+                              <!-- Content will be dynamically populated -->
+                        </ul>
+                  </div>
+
+                  <!-- Sign In Button (Mobile) - Only shown when logged out -->
+                  <div class="sign-in-section">
+                        <button class="sign-in-btn" id="mobileSignInBtn">
+                              <i class="bi bi-box-arrow-in-right"></i>
+                              <span>Sign In</span>
+                        </button>
+                  </div>
+            </div>
+
+            <!-- Navigation -->
+            <div class="collapse navbar-collapse" id="navmenu">
+                  <!-- Centered Navigation Links -->
+                  <ul class="navbar-nav mx-auto">
+                        <li class="nav-item">
+                              <a class="nav-link" href="#missing">Missing Persons</a>
+                        </li>
+                        <li class="nav-item">
+                              <a class="nav-link" href="#pricing">Pricing</a>
+                        </li>
+                        <li class="nav-item">
+                              <a class="nav-link" href="#faq">FAQ</a>
+                        </li>
+                        <li class="nav-item">
+                              <a class="nav-link" href="#">Search</a>
+                        </li>
+                  </ul>
+
+                  <!-- Right Side Actions -->
+                  <div class="d-none d-lg-flex align-items-center gap-3">
+                        <!-- Notification Dropdown (Desktop) - Only shown when logged in -->
+                        <div class="dropdown profile-section">
+                              <a href="#" class="notification-btn" id="desktopNotifDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="margin-left: 8px; margin-top: 8px;">
+                                    <i class="bi bi-bell"></i>
+                                    <span class="notification-badge">3</span>
+                              </a>
+                              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="desktopNotifDropdown" id="desktopNotificationDropdown">
+                                    <!-- Content will be dynamically populated -->
+                              </ul>
+                        </div>
+
+                        <!-- Profile Dropdown (Desktop) - Only shown when logged in -->
+                        <div class="dropdown d-inline-block profile-section">
+                              <a href="#" title="Profile" class="profile-btn" id="desktopDropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-person"></i>
+                              </a>
+                              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="desktopDropdownUser" id="desktopProfileDropdown">
+                                    <!-- Content will be dynamically populated -->
+                              </ul>
+                        </div>
+
+                        <!-- Sign In Button (Desktop) - Only shown when logged out -->
+                        <div class="sign-in-section">
+                              <button id="desktopSignInBtn" class="btn btn-outline-primary">Sign In</button>
+                        </div>
+                  </div>
+            </div>
+      </div>
+</nav>
+
+<!-- Advanced Hero Section -->
+<section class="hero">
+      <!-- Floating Elements -->
+      <div class="floating-element">
+            <div style="width: 60px; height: 60px; background: rgba(59, 130, 246, 0.1); border-radius: 50%; backdrop-filter: blur(10px); border: 1px solid rgba(59, 130, 246, 0.2);"></div>
+      </div>
+      <div class="floating-element">
+            <div style="width: 80px; height: 80px; background: rgba(139, 92, 246, 0.1); border-radius: 20px; backdrop-filter: blur(10px); border: 1px solid rgba(139, 92, 246, 0.2);"></div>
+      </div>
+      <div class="floating-element">
+            <div style="width: 40px; height: 40px; background: rgba(59, 130, 246, 0.15); border-radius: 50%; backdrop-filter: blur(10px); border: 1px solid rgba(59, 130, 246, 0.3);"></div>
+      </div>
+
+      <div class="container hero-content">
+            <h1>Help Reconnect Missing People<br />with Their Loved Ones</h1>
+            <p>
+                  Our community-driven platform enables people to report, search, and share
+                  information about missing people. Together, we can make a difference.
+            </p>
+            <div class="d-flex flex-column flex-sm-row justify-content-center gap-3">
+                  <button class="btn btn-primary pulse">
+                        <i class="bi bi-plus-circle me-2"></i>Report a Missing Person
+                  </button>
+                  <button class="btn btn-outline-primary">
+                        <i class="bi bi-search me-2"></i>Search Missing People
+                  </button>
+            </div>
+      </div>
+</section>
+
+<!-- Advanced Stats Section -->
+<section class="stats-section">
+      <div class="container">
+            <div class="row g-4" id="statsContainer">
+                  <div class="col-12 data-loading">
+                        <div class="loading-spinner"></div>
+                        <p>Loading statistics...</p>
+                  </div>
+            </div>
+      </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="py-5" style="background: var(--bg-primary);">
+      <div class="container">
+            <div class="text-center mb-5 animate-on-scroll">
+                  <h4 class="fw-bold mb-3">How It Works</h4>
+                  <p class="text-muted">Our platform makes it easy to report missing people and help in the search effort</p>
+            </div>
+
+            <div class="row g-4" id="howItWorksContainer">
+                  <div class="col-12 data-loading">
+                        <div class="loading-spinner"></div>
+                        <p>Loading how it works...</p>
+                  </div>
+            </div>
+
+            <div class="text-center mt-5">
+                  <button class="btn btn-outline-primary">Join Our Community</button>
+            </div>
+      </div>
+</section>
+
+<!-- Interactive Map Section -->
+<section class="py-5 bg-secondary" style="background: var(--bg-secondary) !important;">
+      <div class="container">
+            <div class="text-center mb-5 animate-on-scroll">
+                  <h4 class="fw-bold mb-3">Missing People Map</h4>
+                  <p class="text-muted">View missing people reports by location to help in the search effort</p>
+            </div>
+            <div class="animate-on-scroll">
+                  <div id="map" class="map-container"></div>
+            </div>
+      </div>
+</section>
+
+<!-- Recent Missing Persons -->
+<section id="missing" class="py-5" style="background: var(--bg-primary);">
+      <div class="container">
+            <div class="text-center mb-5 animate-on-scroll">
+                  <h4 class="fw-bold mb-3">Recent Missing People</h4>
+                  <p class="text-muted">These individuals were recently reported missing. Please help us find them.</p>
+            </div>
+
+            <div class="row g-4" id="missingPersonsContainer">
+                  <div class="col-12 data-loading">
+                        <div class="loading-spinner"></div>
+                        <p>Loading missing persons data...</p>
+                  </div>
+            </div>
+
+            <div class="text-center mt-5">
+                  <button class="btn btn-outline-primary">View All Missing People</button>
+            </div>
+      </div>
+</section>
+
+<!-- Advanced Pricing Section -->
+<section id="pricing" class="py-5" style="background: var(--bg-secondary);">
+      <div class="container">
+            <div class="text-center mb-5 animate-on-scroll">
+                  <h3 class="fw-bold mb-3">Pricing Plans</h3>
+                  <p class="text-muted">Choose the right plan to maximize visibility for your missing person report</p>
+            </div>
+
+            <div class="alert alert-primary text-center animate-on-scroll" role="alert">
+                  <i class="bi bi-info-circle me-2"></i>
+                  All funds are used to improve the performance of our platform.
+            </div>
+
+            <div class="row g-4 mt-4" id="pricingContainer">
+                  <div class="col-12 data-loading">
+                        <div class="loading-spinner"></div>
+                        <p>Loading pricing information...</p>
+                  </div>
+            </div>
+      </div>
+</section>
+
+<!-- Advanced FAQ Section -->
+<section id="faq" class="py-5" style="background: var(--bg-primary);">
+      <div class="container">
+            <div class="text-center mb-5 animate-on-scroll">
+                  <h5 class="fw-bold mb-3">Frequently Asked Questions</h5>
+                  <p class="text-muted">Get answers to common questions about our platform</p>
+            </div>
+
+            <div class="accordion" id="faqAccordion">
+                  <div class="col-12 data-loading">
+                        <div class="loading-spinner"></div>
+                        <p>Loading FAQs...</p>
+                  </div>
+            </div>
+
+            <div class="text-center mt-4">
+                  <button class="btn btn-outline-primary" id="viewMoreFaqsBtn">
+                        <i class="bi bi-plus-circle me-2"></i>View More FAQs
+                  </button>
+            </div>
+      </div>
+</section>
+
+<!-- Community Section -->
+<section class="community-hero text-white text-center position-relative overflow-hidden" style="height: 400px;">
+      <!-- Background video -->
+      <video autoplay muted loop playsinline poster="../assets/images/hero-bg-img.jpg"
+             class="position-absolute top-0 start-0 w-100 h-100 object-fit-cover" style="z-index: -1;">
+            <source src="../assets/videos/background-video.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+      </video>
+      <div class="container position-relative h-100 d-flex flex-column justify-content-center">
+            <div class="animate-on-scroll">
+                  <h4 class="fw-bold mb-4">Join Our Community Today</h4>
+                  <p class="mb-5 opacity-90">
+                        Help make a difference in the lives of missing people and their families.
+                        Every contribution matters in our mission to reunite families.
+                  </p>
+                  <div class="d-flex flex-column flex-sm-row justify-content-center gap-3">
+                        <button class="btn btn-light text-dark">
+                              <i class="bi bi-person-plus me-2"></i>Create an Account
+                        </button>
+                        <button class="btn btn-outline-light">
+                              <i class="bi bi-search me-2"></i>Browse Missing People
+                        </button>
+                  </div>
+            </div>
+      </div>
+</section>
+
+<!-- Advanced Footer -->
+<footer>
+      <div class="container">
+            <div class="row">
+                  <div class="col-md-4 mb-4">
+                        <div class="footer-brand">
+                              <div class="footer-brand-text">Find4U</div>
+                        </div>
+                        <p class="footer-description">
+                              Helping communities reunite missing persons with their loved ones through
+                              collaborative effort and advanced technology.
+                        </p>
+                        <div class="footer-social">
+                              <a href="#"><i class="bi bi-facebook"></i></a>
+                              <a href="#"><i class="bi bi-twitter"></i></a>
+                              <a href="#"><i class="bi bi-instagram"></i></a>
+                              <a href="#"><i class="bi bi-linkedin"></i></a>
+                        </div>
+                  </div>
+
+                  <div class="col-md-4 mb-4">
+                        <div class="footer-section">
+                              <h6>Quick Links</h6>
+                              <ul>
+                                    <li><a href="#">Search Missing Persons</a></li>
+                                    <li><a href="#">Report Missing Person</a></li>
+                                    <li><a href="#">How It Works</a></li>
+                                    <li><a href="#">Success Stories</a></li>
+                              </ul>
+                        </div>
+                  </div>
+
+                  <div class="col-md-4 mb-4">
+                        <div class="footer-section">
+                              <h6>Emergency Contact</h6>
+                              <p class="mb-2 text-secondary">
+                                    <i class="bi bi-telephone-fill me-2"></i>
+                                    <strong>24/7 Hotline:</strong><br>
+                                    1-800-FIND-4U (1-800-346-348)
+                              </p>
+                              <p class="mb-3">
+                                    <i class="bi bi-envelope-fill me-2"></i>
+                                    <strong>Email Support:</strong><br>
+                                    <a class="text-secondary" href="mailto:help@find4u.org">help@find4u.org</a>
+                              </p>
+                        </div>
+                  </div>
+            </div>
+
+            <div class="footer-bottom">
+                  <p>&copy; 2025 Find4U. All rights reserved. |
+                        <a href="#" style="color: var(--text-muted);">Privacy Policy</a> |
+                        <a href="#" style="color: var(--text-muted);">Terms of Service</a>
+                  </p>
+            </div>
+      </div>
+</footer>
+
+<!-- Back to Top Button -->
+<button id="backToTopBtn" title="Back to Top">
+      <i class="bi bi-arrow-up"></i>
+</button>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
+        // Wait for DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+                // Initialize all components
+                initializeApp();
+        });
+
+        function initializeApp() {
+                // Load all data
+                loadStatsData();
+                loadHowItWorksData();
+                loadMissingPersonsData();
+                loadPricingData();
+                loadFAQData();
+
+                // Initialize map
+                initMap();
+
+                // Initialize other components
+                initializeNotifications();
+                initializeUserManagement();
+                initializeScrollEffects();
+        }
+
+        // Data loading functions
+        async function loadStatsData() {
+                try {
+                        // In a real application, this would be an API call
+                        // const response = await fetch('/api/stats');
+                        // const statsData = await response.json();
+
+                        // Simulating API response with a delay
+                        setTimeout(() => {
+                                const statsData = [
+                                        { value: 12458, label: "Missing People Reported", type: "primary" },
+                                        { value: 8239, label: "People Found", type: "success" },
+                                        { value: 45672, label: "Community Members", type: "danger" }
+                                ];
+
+                                const statsContainer = document.getElementById('statsContainer');
+                                statsContainer.innerHTML = '';
+
+                                statsData.forEach((stat, index) => {
+                                        const statBox = document.createElement('div');
+                                        statBox.className = `col-md-4 animate-on-scroll`;
+                                        if (index > 0) {
+                                                statBox.style.animationDelay = `${index * 0.2}s`;
+                                        }
+                                        statBox.innerHTML = `
+                        <div class="stat-box box${index + 1}">
+                            <h4>${stat.value.toLocaleString()}</h4>
+                            <p>${stat.label}</p>
+                        </div>
+                    `;
+                                        statsContainer.appendChild(statBox);
+                                });
+
+                                // Re-initialize scroll animations for new elements
+                                initScrollAnimations();
+                        }, 1000);
+
+                } catch (error) {
+                        console.error('Error loading stats data:', error);
+                        document.getElementById('statsContainer').innerHTML = `
+                <div class="col-12 data-error">
+                    <i class="bi bi-exclamation-triangle"></i>
+                    <p>Failed to load statistics. Please try again later.</p>
+                </div>
+            `;
+                }
+        }
+
+        async function loadHowItWorksData() {
+                try {
+                        // Simulating API response with a delay
+                        setTimeout(() => {
+                                const howItWorksData = [
+                                        {
+                                                icon: 'bi-exclamation-circle',
+                                                title: 'Report',
+                                                description: 'Submit a detailed report about a missing person including photos, last known location, and contact information.'
+                                        },
+                                        {
+                                                icon: 'bi-search',
+                                                title: 'Search',
+                                                description: 'Browse and search through reports of missing people with filtering by location, date, and characteristics.'
+                                        },
+                                        {
+                                                icon: 'bi-bell',
+                                                title: 'Get Updates',
+                                                description: 'Receive notifications about new reports in your area or updates on cases you\'re following.'
+                                        }
+                                ];
+
+                                const howItWorksContainer = document.getElementById('howItWorksContainer');
+                                howItWorksContainer.innerHTML = '';
+
+                                howItWorksData.forEach((item, index) => {
+                                        const card = document.createElement('div');
+                                        card.className = `col-md-4 animate-on-scroll`;
+                                        if (index > 0) {
+                                                card.style.animationDelay = `${index * 0.2}s`;
+                                        }
+                                        card.innerHTML = `
+                        <div class="card-hover p-4 h-100 text-center">
+                            <div class="icon-circle">
+                                <i class="bi ${item.icon}"></i>
+                            </div>
+                            <h6 class="fw-semibold mb-3">${item.title}</h6>
+                            <p class="text-secondary small">${item.description}</p>
+                        </div>
+                    `;
+                                        howItWorksContainer.appendChild(card);
+                                });
+
+                                // Re-initialize scroll animations for new elements
+                                initScrollAnimations();
+                        }, 1200);
+
+                } catch (error) {
+                        console.error('Error loading how it works data:', error);
+                        document.getElementById('howItWorksContainer').innerHTML = `
+                <div class="col-12 data-error">
+                    <i class="bi bi-exclamation-triangle"></i>
+                    <p>Failed to load content. Please try again later.</p>
+                </div>
+            `;
+                }
+        }
+
+        async function loadMissingPersonsData() {
+                try {
+                        // Simulating API response with a delay
+                        setTimeout(() => {
+                                const missingPersonsData = [
+                                        {
+                                                name: "Olivia Thompson",
+                                                image: "https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=400",
+                                                age: 19,
+                                                lastSeen: "7/10/2023",
+                                                location: "University of Texas Campus, Austin",
+                                                description: "Last seen wearing a sweatshirt, jeans, and white sneakers. Green backpack."
+                                        },
+                                        {
+                                                name: "David Chen",
+                                                image: "https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=400",
+                                                age: 17,
+                                                lastSeen: "7/2/2023",
+                                                location: "Downtown Seattle, WA",
+                                                description: "Last seen wearing red hoodie, basketball shorts, white sneakers."
+                                        },
+                                        {
+                                                name: "James Wilson",
+                                                image: "https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=400",
+                                                age: 42,
+                                                lastSeen: "6/13/2023",
+                                                location: "Downtown Chicago, IL",
+                                                description: "Wearing gray business suit, black shoes, black laptop bag."
+                                        }
+                                ];
+
+                                const missingPersonsContainer = document.getElementById('missingPersonsContainer');
+                                missingPersonsContainer.innerHTML = '';
+
+                                missingPersonsData.forEach((person, index) => {
+                                        const card = document.createElement('div');
+                                        card.className = `col-md-4 animate-on-scroll`;
+                                        if (index > 0) {
+                                                card.style.animationDelay = `${index * 0.2}s`;
+                                        }
+                                        card.innerHTML = `
+                        <div class="card h-100">
+                            <img src="${person.image}"
+                                class="card-img-top" style="height: 250px; object-fit: cover;" alt="${person.name}">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h6 class="mb-0 fw-semibold">${person.name}</h6>
+                                    <span class="status-badge">Missing</span>
+                                </div>
+                                <div class="mb-3">
+                                    <p class="mb-1"><strong>Age:</strong> ${person.age}</p>
+                                    <p class="mb-1"><strong>Last seen:</strong> ${person.lastSeen}</p>
+                                    <p class="mb-1"><strong>Location:</strong> ${person.location}</p>
+                                </div>
+                                <p class="text-secondary small mb-3">${person.description}</p>
+                                <button class="btn btn-outline-primary btn-sm w-100">
+                                    <i class="bi bi-eye me-2"></i>View Details
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                                        missingPersonsContainer.appendChild(card);
+                                });
+
+                                // Re-initialize scroll animations for new elements
+                                initScrollAnimations();
+                        }, 1500);
+
+                } catch (error) {
+                        console.error('Error loading missing persons data:', error);
+                        document.getElementById('missingPersonsContainer').innerHTML = `
+                <div class="col-12 data-error">
+                    <i class="bi bi-exclamation-triangle"></i>
+                    <p>Failed to load missing persons data. Please try again later.</p>
+                </div>
+            `;
+                }
+        }
+
+        async function loadPricingData() {
+                try {
+                        // Simulating API response with a delay
+                        setTimeout(() => {
+                                const pricingData = [
+                                        {
+                                                name: "Basic",
+                                                price: "Free",
+                                                duration: "/ 2 days",
+                                                description: "Essential visibility for your missing person report",
+                                                features: [
+                                                        "Standard listing",
+                                                        "Basic search visibility",
+                                                        "Email notifications",
+                                                        "Report updates",
+                                                        "Community sharing"
+                                                ],
+                                                highlighted: false
+                                        },
+                                        {
+                                                name: "Standard",
+                                                price: "Rs.100.00",
+                                                duration: "/ 7 days",
+                                                description: "Enhanced visibility with extended duration",
+                                                features: [
+                                                        "Extended 15-day visibility",
+                                                        "Highlighted post",
+                                                        "Increased search priority",
+                                                        "Email notifications",
+                                                        "Report updates",
+                                                        "Community sharing",
+                                                        "Basic social media promotion"
+                                                ],
+                                                highlighted: true
+                                        },
+                                        {
+                                                name: "Premium",
+                                                price: "Rs.350.00",
+                                                duration: "/ Month",
+                                                description: "Maximum visibility and priority support",
+                                                features: [
+                                                        "Maximum 30-day visibility",
+                                                        "Top placement in search results",
+                                                        "Featured on interactive map",
+                                                        "Priority case handling",
+                                                        "Highlighted post",
+                                                        "Enhanced social media promotion",
+                                                        "Email notifications",
+                                                        "Report updates",
+                                                        "Community sharing",
+                                                        "Priority support"
+                                                ],
+                                                highlighted: false
+                                        }
+                                ];
+
+                                const pricingContainer = document.getElementById('pricingContainer');
+                                pricingContainer.innerHTML = '';
+
+                                pricingData.forEach((plan, index) => {
+                                        const planCard = document.createElement('div');
+                                        planCard.className = `col-md-4 animate-on-scroll`;
+                                        if (index > 0) {
+                                                planCard.style.animationDelay = `${index * 0.2}s`;
+                                        }
+
+                                        planCard.innerHTML = `
+                        <div class="plan-card text-center h-100 ${plan.highlighted ? 'highlighted' : ''}">
+                            ${plan.highlighted ? '<span class="recommended-label">Recommended</span>' : ''}
+                            <h6 class="fw-bold text-muted mb-3">${plan.name}</h6>
+                            <h4 class="mb-3">${plan.price} <small class="text-muted fs-6">${plan.duration}</small></h4>
+                            <p class="text-secondary small mb-4">${plan.description}</p>
+                            <button class="btn ${plan.highlighted ? 'btn-primary' : 'btn-outline-primary'} btn-sm mb-4 w-100">
+                                Select ${plan.name} Plan
+                            </button>
+                            <hr style="border-color: var(--border-primary);">
+                            <p class="fw-semibold mb-3 text-start">Features included:</p>
+                            <ul class="list-unstyled text-start small">
+                                ${plan.features.map(feature => `<li class="mb-2">✔ ${feature}</li>`).join('')}
+                            </ul>
+                        </div>
+                    `;
+
+                                        pricingContainer.appendChild(planCard);
+                                });
+
+                                // Re-initialize scroll animations for new elements
+                                initScrollAnimations();
+                        }, 800);
+
+                } catch (error) {
+                        console.error('Error loading pricing data:', error);
+                        document.getElementById('pricingContainer').innerHTML = `
+                <div class="col-12 data-error">
+                    <i class="bi bi-exclamation-triangle"></i>
+                    <p>Failed to load pricing information. Please try again later.</p>
+                </div>
+            `;
+                }
+        }
+
+        async function loadFAQData() {
+                try {
+                        // Simulating API response with a delay
+                        setTimeout(() => {
+                                const faqData = [
+                                        {
+                                                question: "Can I still report a missing person without paying?",
+                                                answer: "Yes, we offer a free option for those who cannot afford a paid plan. The free option provides basic visibility, but has limited duration and features.",
+                                                icon: "bi-question-circle"
+                                        },
+                                        {
+                                                question: "What happens when my plan duration ends?",
+                                                answer: "Your report will remain online with reduced visibility. Renew or upgrade anytime to maintain exposure.",
+                                                icon: "bi-clock"
+                                        },
+                                        {
+                                                question: "How are the funds used?",
+                                                answer: "All funds help support platform hosting, outreach, and efforts to reconnect missing people.",
+                                                icon: "bi-credit-card"
+                                        },
+                                        {
+                                                question: "Can I upgrade my plan later?",
+                                                answer: "Yes, upgrades are possible anytime. You'll only pay the difference for the new plan duration.",
+                                                icon: "bi-arrow-up-circle"
+                                        },
+                                        {
+                                                question: "Can I cancel my plan?",
+                                                answer: "Yes, cancellations are allowed. Refunds depend on our cancellation policy.",
+                                                icon: "bi-x-circle"
+                                        }
+                                ];
+
+                                const faqContainer = document.getElementById('faqAccordion');
+
+                                // Clear loading message
+                                faqContainer.innerHTML = '';
+
+                                // Add first 3 FAQs (visible by default)
+                                faqData.slice(0, 3).forEach((faq, index) => {
+                                        const faqItem = document.createElement('div');
+                                        faqItem.className = `accordion-item animate-on-scroll`;
+                                        if (index > 0) {
+                                                faqItem.style.animationDelay = `${index * 0.1}s`;
+                                        }
+                                        faqItem.innerHTML = `
+                        <h2 class="accordion-header">
+                            <button class="accordion-button ${index === 0 ? '' : 'collapsed'}" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${index + 1}">
+                                <i class="bi ${faq.icon} me-3"></i>
+                                ${faq.question}
+                            </button>
+                        </h2>
+                        <div id="collapse${index + 1}" class="accordion-collapse collapse ${index === 0 ? 'show' : ''}" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                ${faq.answer}
+                            </div>
+                        </div>
+                    `;
+                                        faqContainer.appendChild(faqItem);
+                                });
+
+                                // Add remaining FAQs to hidden section
+                                const moreFaqsContainer = document.createElement('div');
+                                moreFaqsContainer.id = 'moreFaqs';
+                                moreFaqsContainer.style.display = 'none';
+
+                                faqData.slice(3).forEach((faq, index) => {
+                                        const faqItem = document.createElement('div');
+                                        faqItem.className = 'accordion-item';
+                                        faqItem.innerHTML = `
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${index + 4}">
+                                <i class="bi ${faq.icon} me-3"></i>
+                                ${faq.question}
+                            </button>
+                        </h2>
+                        <div id="collapse${index + 4}" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                ${faq.answer}
+                            </div>
+                        </div>
+                    `;
+                                        moreFaqsContainer.appendChild(faqItem);
+                                });
+
+                                faqContainer.appendChild(moreFaqsContainer);
+
+                                // Update button event listener
+                                document.getElementById('viewMoreFaqsBtn').onclick = function() {
+                                        moreFaqsContainer.style.display = 'block';
+                                        this.style.display = 'none';
+                                };
+
+                                // Re-initialize scroll animations for new elements
+                                initScrollAnimations();
+                        }, 900);
+
+                } catch (error) {
+                        console.error('Error loading FAQ data:', error);
+                        document.getElementById('faqAccordion').innerHTML = `
+                <div class="col-12 data-error">
+                    <i class="bi bi-exclamation-triangle"></i>
+                    <p>Failed to load FAQs. Please try again later.</p>
+                </div>
+            `;
+                }
+        }
+
+        // Initialize map
+        function initMap() {
+                // Check if map container exists
+                const mapContainer = document.getElementById('map');
+                if (!mapContainer) {
+                        console.error('Map container not found');
+                        return;
+                }
+
+                try {
+                        const map = L.map('map', {
+                                center: [39.8283, -98.5795], // Center of USA
+                                zoom: 4,
+                                zoomControl: true,
+                                scrollWheelZoom: true
+                        });
+
+                        // Add tile layer
+                        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                                maxZoom: 18
+                        }).addTo(map);
+
+                        // Custom marker icon
+                        const customIcon = L.divIcon({
+                                className: 'custom-marker',
+                                html: '<div style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4); border: 2px solid rgba(255,255,255,0.2);"><i class="bi bi-geo-alt" style="font-size: 14px;"></i></div>',
+                                iconSize: [30, 30],
+                                iconAnchor: [15, 15]
+                        });
+
+                        // Add markers with enhanced popups
+                        const markers = [
+                                { name: "Olivia Thompson", lat: 30.2849, lng: -97.7341, age: 19, date: "Oct 7, 2023" },
+                                { name: "David Chen", lat: 47.6062, lng: -122.3321, age: 17, date: "Jul 2, 2023" },
+                                { name: "James Wilson", lat: 41.8781, lng: -87.6298, age: 42, date: "Jun 13, 2023" }
+                        ];
+
+                        markers.forEach(({ name, lat, lng, age, date }) => {
+                                L.marker([lat, lng], { icon: customIcon })
+                                        .addTo(map)
+                                        .bindPopup(`
+                        <div style="padding: 15px; min-width: 200px; background: var(--bg-card); color: var(--text-primary); border-radius: 8px;">
+                            <h6 style="margin: 0 0 8px 0; color: var(--accent-danger); font-weight: bold;">${name}</h6>
+                            <p style="margin: 0 0 4px 0; font-size: 14px; color: var(--text-secondary);"><strong>Age:</strong> ${age}</p>
+                            <p style="margin: 0 0 4px 0; font-size: 14px; color: var(--text-secondary);"><strong>Last seen:</strong> ${date}</p>
+                            <button style="background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); color: white; border: none; border-radius: 20px; padding: 8px 16px; font-size: 12px; font-weight: 600; cursor: pointer;">View Details</button>
+                        </div>
+                    `);
+                        });
+                } catch (error) {
+                        console.error('Error initializing map:', error);
+                        document.getElementById('map').innerHTML = `
+                <div class="data-error" style="height: 100%; display: flex; align-items: center; justify-content: center;">
+                    <div>
+                        <i class="bi bi-exclamation-triangle"></i>
+                        <p>Failed to load map. Please try again later.</p>
+                    </div>
+                </div>
+            `;
+                }
+        }
+
+        // Initialize notifications
+        function initializeNotifications() {
+                // Notification data structure
+                let notifications = [
+                        {
+                                id: 1,
+                                title: "Case Update - Urgent",
+                                text: "Critical information received for a case you're following.",
+                                time: "2 minutes ago",
+                                icon: "bi-exclamation-triangle",
+                                type: "danger",
+                                unread: true
+                        },
+                        {
+                                id: 2,
+                                title: "New Case Nearby",
+                                text: "New missing person case reported within 5 miles of your location.",
+                                time: "1 hour ago",
+                                icon: "bi-geo-alt",
+                                type: "warning",
+                                unread: true
+                        },
+                        {
+                                id: 3,
+                                title: "Case Resolved",
+                                text: "Great news! A case you're following has been resolved.",
+                                time: "3 hours ago",
+                                icon: "bi-check-circle",
+                                type: "success",
+                                unread: false
+                        }
+                ];
+
+                // Function to generate notification HTML
+                function generateNotificationHTML(notification) {
+                        return `
+                <a class="notification-dropdown-item ${notification.unread ? 'unread' : ''}" href="#" data-id="${notification.id}">
+                    <div class="notification-icon ${notification.type}">
+                        <i class="bi ${notification.icon}"></i>
+                    </div>
+                    <div class="notification-content">
+                        <div class="notification-title">${notification.title}</div>
+                        <div class="notification-text">${notification.text}</div>
+                        <div class="notification-time">${notification.time}</div>
+                    </div>
+                </a>
+            `;
+                }
+
+                // Function to update notification dropdowns
+                function updateNotificationDropdowns() {
+                        const unreadCount = notifications.filter(n => n.unread).length;
+
+                        // Update notification badges
+                        document.querySelectorAll('.notification-badge').forEach(badge => {
+                                badge.textContent = unreadCount;
+                                badge.style.display = unreadCount > 0 ? 'block' : 'none';
+                        });
+
+                        // Generate notification HTML
+                        let notificationsHTML = `
+                <li class="dropdown-header">
+                    <div class="fw-bold">Notifications</div>
+                    <small class="text-muted">${unreadCount} new alerts</small>
+                </li>
+                <li><hr class="dropdown-divider"></li>
+            `;
+
+                        if (notifications.length > 0) {
+                                notifications.forEach(notification => {
+                                        notificationsHTML += `<li>${generateNotificationHTML(notification)}</li>`;
+                                });
+                        } else {
+                                notificationsHTML += `
+                    <li class="empty-state">
+                        <i class="bi bi-bell-slash"></i>
+                        <h6>No notifications</h6>
+                        <p>You're all caught up!</p>
+                    </li>
+                `;
+                        }
+
+                        notificationsHTML += `
+                <li><hr class="dropdown-divider"></li>
+                <li class="dropdown-actions">
+                    <a href="#" class="markAllRead">Mark all as read</a>
+                    <a href="#" class="text-danger clearAll">Clear all</a>
+                </li>
+                <li>
+                    <a href="#" class="notification-settings-link">
+                        <i class="bi bi-gear"></i> Notification Settings
+                    </a>
+                </li>
+            `;
+
+                        // Update both notification dropdowns
+                        const mobileDropdown = document.getElementById('mobileNotificationDropdown');
+                        const desktopDropdown = document.getElementById('desktopNotificationDropdown');
+
+                        if (mobileDropdown) mobileDropdown.innerHTML = notificationsHTML;
+                        if (desktopDropdown) desktopDropdown.innerHTML = notificationsHTML;
+
+                        // Reattach event listeners
+                        attachNotificationEventListeners();
+                }
+
+                // Function to attach notification event listeners
+                function attachNotificationEventListeners() {
+                        // Mark all as read functionality
+                        document.querySelectorAll('.markAllRead').forEach(btn => {
+                                btn.addEventListener('click', function(e) {
+                                        e.preventDefault();
+
+                                        // Mark all notifications as read
+                                        notifications = notifications.map(n => ({...n, unread: false}));
+
+                                        // Update UI
+                                        updateNotificationDropdowns();
+
+                                        // Show feedback
+                                        this.textContent = 'All marked as read';
+                                        setTimeout(() => {
+                                                this.textContent = 'Mark all as read';
+                                        }, 2000);
+                                });
+                        });
+
+                        // Clear all functionality
+                        document.querySelectorAll('.clearAll').forEach(btn => {
+                                btn.addEventListener('click', function(e) {
+                                        e.preventDefault();
+
+                                        if (confirm('Are you sure you want to clear all notifications?')) {
+                                                // Clear all notifications
+                                                notifications = [];
+
+                                                // Update UI
+                                                updateNotificationDropdowns();
+                                        }
+                                });
+                        });
+
+                        // Individual notification click
+                        document.querySelectorAll('.notification-dropdown-item').forEach(item => {
+                                item.addEventListener('click', function(e) {
+                                        e.preventDefault();
+
+                                        const notificationId = parseInt(this.getAttribute('data-id'));
+
+                                        // Mark this notification as read
+                                        notifications = notifications.map(n =>
+                                                n.id === notificationId ? {...n, unread: false} : n
+                                        );
+
+                                        // Update UI
+                                        updateNotificationDropdowns();
+                                });
+                        });
+                }
+
+                // Initialize notifications
+                updateNotificationDropdowns();
+        }
+
+        // Initialize user management
+        function initializeUserManagement() {
+                // User management
+                let currentUser = {
+                        name: "Admin User",
+                        email: "admin@find4u.org",
+                        isAdmin: true,
+                        isLoggedIn: true
+                };
+
+                // Function to update profile dropdown based on user role
+                function updateProfileDropdown() {
+                        if (!currentUser) {
+                                // Hide profile dropdowns or show login prompt
+                                document.querySelectorAll('.profile-section').forEach(el => {
+                                        el.style.display = 'none';
+                                });
+                                return;
+                        }
+
+                        const dropdownContent = `
+                <li class="dropdown-header">
+                    <div class="fw-bold">${currentUser.name}</div>
+                    <small class="text-muted">${currentUser.email}</small>
+                </li>
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                    <a class="dropdown-item" href="#">
+                        <i class="bi bi-person"></i>
+                        Profile
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" href="#">
+                        <i class="bi bi-folder"></i>
+                        My Cases
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" href="#">
+                        <i class="bi bi-heart"></i>
+                        Following
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" href="#">
+                        <i class="bi bi-receipt"></i>
+                        Payment History
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" href="#">
+                        <i class="bi bi-gear"></i>
+                        Settings
+                    </a>
+                </li>
+                ${currentUser.isAdmin ? `
+                <li>
+                    <a class="dropdown-item" href="#">
+                        <i class="bi bi-grid-3x3-gap"></i>
+                        Admin Dashboard
+                    </a>
+                </li>
+                ` : ''}
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                    <a class="dropdown-item text-danger" href="#" id="signOutBtn">
+                        <i class="bi bi-box-arrow-right"></i>
+                        Sign Out
+                    </a>
+                </li>
+            `;
+
+                        // Update both dropdowns (mobile and desktop)
+                        const mobileDropdown = document.getElementById('mobileProfileDropdown');
+                        const desktopDropdown = document.getElementById('desktopProfileDropdown');
+
+                        if (mobileDropdown) mobileDropdown.innerHTML = dropdownContent;
+                        if (desktopDropdown) desktopDropdown.innerHTML = dropdownContent;
+
+                        // Reattach event listeners
+                        document.querySelectorAll('#signOutBtn').forEach(btn => {
+                                btn.addEventListener('click', handleSignOut);
+                        });
+                }
+
+                // Function to update login state UI
+                function updateLoginState() {
+                        if (currentUser && currentUser.isLoggedIn){
+                                document.body.classList.add('logged-in');
+                                document.body.classList.remove('logged-out');
+                        } else {
+                                document.body.classList.add('logged-out');
+                                document.body.classList.remove('logged-in');
+                        }
+                }
+
+                // Role Check functionality
+                function checkUser(){
+                        if (currentUser.isAdmin) {
+                                currentUser = {
+                                        ...currentUser,
+                                        name: "Admin User",
+                                        email: "admin@find4u.org",
+                                        isAdmin: true
+                                };
+                        } else {
+                                currentUser = {
+                                        ...currentUser,
+                                        name: "Regular User",
+                                        email: "user@find4u.org",
+                                        isAdmin: false
+                                };
+                        }
+                        updateProfileDropdown();
+                }
+
+                // Sign out functionality
+                function handleSignOut(e) {
+                        e.preventDefault();
+
+                        if (confirm('Are you sure you want to sign out?')) {
+                                // Add loading state
+                                const originalText = this.innerHTML;
+                                this.innerHTML = '<i class="bi bi-arrow-repeat"></i> Signing out...';
+
+                                // Simulate sign out process
+                                setTimeout(() => {
+                                        currentUser.isLoggedIn = false;
+                                        updateLoginState();
+                                        alert('You have been signed out successfully!');
+                                        this.innerHTML = originalText;
+                                }, 1500);
+                        }
+                }
+
+                // Sign in functionality
+                function handleSignIn() {
+                        // Simulate sign in process
+                        const signInBtn = document.getElementById('mobileSignInBtn');
+                        const originalText = signInBtn.innerHTML;
+
+                        setTimeout(() => {
+                                currentUser.isLoggedIn = true;
+                                updateLoginState();
+                                alert('You have been signed in successfully!');
+                                signInBtn.innerHTML = originalText;
+                        }, 1500);
+                }
+
+                // Initialize user management
+                checkUser();
+                updateProfileDropdown();
+                updateLoginState();
+
+                // Add event listeners to sign in buttons
+                const mobileSignInBtn = document.getElementById('mobileSignInBtn');
+                const desktopSignInBtn = document.getElementById('desktopSignInBtn');
+
+                if (mobileSignInBtn) mobileSignInBtn.addEventListener('click', handleSignIn);
+                if (desktopSignInBtn) desktopSignInBtn.addEventListener('click', handleSignIn);
+        }
+
+        // Initialize scroll effects
+        function initializeScrollEffects() {
+                // Navbar scroll effect
+                window.addEventListener('scroll', () => {
+                        const navbar = document.getElementById('mainNavbar');
+                        if (navbar) {
+                                if (window.scrollY > 50) {
+                                        navbar.style.background = 'rgba(10, 10, 10, 0.98)';
+                                        navbar.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.3)';
+                                } else {
+                                        navbar.style.background = 'rgba(10, 10, 10, 0.95)';
+                                        navbar.style.boxShadow = 'none';
+                                }
+                        }
+                });
+
+                // Get all nav links and all sections
+                const sections = document.querySelectorAll("section[id]");
+                const navLinks = document.querySelectorAll(".navbar-nav .nav-link");
+
+                function activateNavLinkOnScroll() {
+                        let scrollY = window.scrollY;
+
+                        sections.forEach((section) => {
+                                const sectionTop = section.offsetTop - 150; // offset for fixed navbar
+                                const sectionHeight = section.offsetHeight;
+                                const sectionId = section.getAttribute("id");
+
+                                if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
+                                        navLinks.forEach((link) => {
+                                                link.classList.remove("active");
+                                                if (link.getAttribute("href") === `#${sectionId}`) {
+                                                        link.classList.add("active");
+                                                }
+                                        });
+                                }
+                        });
+                }
+
+                window.addEventListener("scroll", activateNavLinkOnScroll);
+                window.addEventListener("load", activateNavLinkOnScroll); // Also run on page load
+
+                // Initialize scroll animations
+                initScrollAnimations();
+
+                // Back to top button
+                const backToTopBtn = document.getElementById('backToTopBtn');
+
+                window.addEventListener('scroll', () => {
+                        if (backToTopBtn) {
+                                if (window.pageYOffset > 300) {
+                                        backToTopBtn.style.display = 'flex';
+                                } else {
+                                        backToTopBtn.style.display = 'none';
+                                }
+                        }
+                });
+
+                if (backToTopBtn) {
+                        backToTopBtn.addEventListener('click', () => {
+                                window.scrollTo({
+                                        top: 0,
+                                        behavior: 'smooth'
+                                });
+                        });
+                }
+
+                // Enhanced button interactions
+                document.querySelectorAll('.btn-primary, .btn-outline-primary').forEach(btn => {
+                        btn.addEventListener('mouseenter', function() {
+                                this.style.transform = 'translateY(-2px)';
+                        });
+
+                        btn.addEventListener('mouseleave', function() {
+                                this.style.transform = 'translateY(0)';
+                        });
+                });
+
+                // Smooth scrolling for navigation links
+                document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                        anchor.addEventListener('click', function (e) {
+                                e.preventDefault();
+                                const target = document.querySelector(this.getAttribute('href'));
+                                if (target) {
+                                        target.scrollIntoView({
+                                                behavior: 'smooth',
+                                                block: 'start'
+                                        });
+                                }
+                        });
+                });
+
+                // Loading states for buttons
+                document.querySelectorAll('.btn-primary').forEach(btn => {
+                        btn.addEventListener('click', function() {
+                                const originalText = this.innerHTML;
+                                this.innerHTML = '<span class="loading-spinner me-2"></span>Processing...';
+                                this.disabled = true;
+
+                                setTimeout(() => {
+                                        this.innerHTML = originalText;
+                                        this.disabled = false;
+                                }, 2000);
+                        });
+                });
+        }
+
+        // Initialize scroll animations
+        function initScrollAnimations() {
+                const observerOptions = {
+                        threshold: 0.1,
+                        rootMargin: '0px 0px -50px 0px'
+                };
+
+                const observer = new IntersectionObserver((entries) => {
+                        entries.forEach(entry => {
+                                if (entry.isIntersecting) {
+                                        entry.target.classList.add('animated');
+                                }
+                        });
+                }, observerOptions);
+
+                document.querySelectorAll('.animate-on-scroll').forEach(el => {
+                        observer.observe(el);
+                });
+        }
+</script>
+
+</body>
+</html>
+

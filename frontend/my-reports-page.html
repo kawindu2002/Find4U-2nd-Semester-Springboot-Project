@@ -1,0 +1,2278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <title>My Reports - Find4U</title>
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+      <style>
+          :root {
+              --bg-primary: #0a0a0a;
+              --bg-secondary: #111111;
+              --bg-tertiary: #1a1a1a;
+              --bg-card: #1e1e1e;
+              --bg-hover: #252525;
+              --bg-highlight: rgba(59, 130, 246, 0.05);
+              --border-primary: #2a2a2a;
+              --border-secondary: #333333;
+              --text-primary: #ffffff;
+              --text-secondary: #b3b3b3;
+              --text-muted: #666666;
+              --accent-primary: #3b82f6;
+              --accent-secondary: #8b5cf6;
+              --accent-success: #10b981;
+              --accent-warning: #f59e0b;
+              --accent-danger: #ef4444;
+              --accent-info: #06b6d4;
+              --gradient-primary: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+              --gradient-secondary: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+              --gradient-success: linear-gradient(135deg, #059669 0%, #10b981 100%);
+              --gradient-danger: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+              --gradient-warning: linear-gradient(135deg, #d97706 0%, #f59e0b 100%);
+              --gradient-info: linear-gradient(135deg, #0891b2 0%, #06b6d4 100%);
+              --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+              --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+              --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+              --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6);
+              --shadow-glow: 0 0 20px rgba(59, 130, 246, 0.3);
+              --border-radius: 12px;
+              --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          }
+
+          * {
+              margin: 0;
+              padding: 0;
+              box-sizing: border-box;
+          }
+
+          body {
+              font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+              background: var(--bg-primary);
+              color: var(--text-primary);
+              line-height: 1.6;
+              overflow-x: hidden;
+              min-height: 100vh;
+              position: relative;
+              display: flex;
+              flex-direction: column;
+          }
+
+          a {
+              text-decoration: none;
+          }
+
+          main {
+              flex: 1;
+              padding-top: 80px;
+          }
+
+          /* Scrollbar Styling */
+          ::-webkit-scrollbar {
+              width: 8px;
+          }
+
+          ::-webkit-scrollbar-track {
+              background: var(--bg-secondary);
+          }
+
+          ::-webkit-scrollbar-thumb {
+              background: var(--border-secondary);
+              border-radius: 4px;
+          }
+
+          ::-webkit-scrollbar-thumb:hover {
+              background: var(--accent-primary);
+          }
+
+          /* Advanced Navbar Styles */
+          .navbar-dark {
+              background: rgba(10, 10, 10, 0.95) !important;
+              backdrop-filter: blur(20px);
+              border-bottom: 1px solid var(--border-primary);
+              transition: var(--transition);
+          }
+
+          .navbar-brand {
+              font-weight: 800;
+              font-size: 1.5rem;
+              background: var(--gradient-primary);
+              -webkit-background-clip: text;
+              -webkit-text-fill-color: transparent;
+              background-clip: text;
+          }
+
+          .nav-link {
+              color: var(--text-secondary) !important;
+              font-weight: 500;
+              position: relative;
+              transition: var(--transition);
+          }
+
+          .nav-link::after {
+              content: '';
+              position: absolute;
+              width: 0;
+              height: 2px;
+              bottom: -5px;
+              left: 50%;
+              background: var(--gradient-primary);
+              transition: var(--transition);
+              transform: translateX(-50%);
+          }
+
+          .nav-link:hover {
+              color: var(--text-primary) !important;
+          }
+
+          .nav-link:hover::after {
+              width: 100%;
+          }
+
+          .nav-link.active {
+              color: var(--text-primary) !important;
+          }
+
+          .notification-btn {
+              background: none;
+              border: none;
+              color: var(--text-secondary);
+              font-size: 1.2rem;
+              padding: 8px;
+              border-radius: 8px;
+              transition: var(--transition);
+              position: relative;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+          }
+
+          .notification-btn:hover {
+              color: var(--accent-primary);
+              background: rgba(59, 130, 246, 0.1);
+              transform: translateY(-2px);
+          }
+
+          .notification-badge {
+              position: absolute;
+              top: -6px;
+              right: -6px;
+              background: var(--gradient-danger);
+              color: white;
+              font-size: 10px;
+              font-weight: 600;
+              padding: 3px 6px;
+              border-radius: 50%;
+              line-height: 1;
+              box-shadow: var(--shadow-md);
+              animation: pulse 2s infinite;
+          }
+
+          @keyframes pulse {
+              0%, 100% { transform: scale(1); }
+              50% { transform: scale(1.1); }
+          }
+
+          .profile-btn {
+              background: rgba(59, 130, 246, 0.1);
+              border: 1px solid rgba(59, 130, 246, 0.3);
+              border-radius: 50%;
+              width: 40px;
+              height: 40px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              transition: var(--transition);
+          }
+
+          .profile-btn:hover {
+              background: rgba(59, 130, 246, 0.2);
+              border-color: var(--accent-primary);
+              transform: scale(1.1);
+              box-shadow: var(--shadow-glow);
+          }
+
+          .profile-btn i {
+              color: var(--accent-primary);
+              font-size: 1.1rem;
+          }
+
+          .navbar-toggler {
+              border: none;
+              padding: 8px;
+              border-radius: 8px;
+              transition: var(--transition);
+          }
+
+          .navbar-toggler:hover {
+              background: var(--bg-hover);
+          }
+
+          .dropdown-menu {
+              min-width: 280px;
+              max-width: 320px;
+              border-radius: var(--border-radius);
+              padding: 0;
+              background: var(--bg-card);
+              border: 1px solid var(--border-primary);
+              box-shadow: var(--shadow-xl);
+              backdrop-filter: blur(20px);
+              animation: fadeInUp 0.3s ease-out;
+              overflow: hidden;
+          }
+
+          @keyframes fadeInUp {
+              from {
+                  opacity: 0;
+                  transform: translateY(10px);
+              }
+              to {
+                  opacity: 1;
+                  transform: translateY(0);
+              }
+          }
+
+          .btn-outline-primary {
+              border: 2px solid var(--accent-primary);
+              color: var(--accent-primary);
+              background: transparent;
+              font-weight: 600;
+              padding: 8px 24px;
+              border-radius: 50px;
+              transition: var(--transition);
+          }
+
+          .btn-outline-primary:hover {
+              background: var(--accent-primary);
+              color: white;
+              box-shadow: var(--shadow-glow);
+              transform: translateY(-2px);
+          }
+
+          .dropdown-header {
+              padding: 0.5rem 1.5rem;
+              font-weight: 600;
+              border-bottom: 1px solid var(--border-primary);
+              margin-bottom: 0;
+          }
+
+          .dropdown-header .fw-bold {
+              color: var(--text-primary);
+              font-size: 1rem;
+              margin-bottom: 0.25rem;
+          }
+
+          .dropdown-header .text-muted {
+              color: var(--text-muted) !important;
+              font-size: 0.85rem;
+          }
+
+          .dropdown-item {
+              display: flex;
+              align-items: center;
+              gap: 12px;
+              padding: 12px 1.5rem;
+              color: var(--text-secondary);
+              text-decoration: none;
+              transition: var(--transition);
+              position: relative;
+              overflow: hidden;
+          }
+
+          .dropdown-item::before {
+              content: '';
+              position: absolute;
+              top: 0;
+              left: -100%;
+              width: 100%;
+              height: 100%;
+              background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+              transition: var(--transition);
+              transform: translateX(-50%);
+          }
+
+          .dropdown-item:hover::before {
+              left: 100%;
+          }
+
+          .dropdown-item:hover {
+              background: var(--bg-hover);
+              color: var(--text-primary);
+              transform: translateX(4px);
+          }
+
+          .dropdown-item i {
+              width: 20px;
+              text-align: center;
+              font-size: 1rem;
+              transition: var(--transition);
+          }
+
+          .dropdown-item:hover i {
+              color: var(--accent-primary);
+              transform: scale(1.1);
+          }
+
+          .notification-dropdown-item {
+              display: flex;
+              align-items: flex-start;
+              gap: 12px;
+              padding: 12px 1.5rem;
+              color: var(--text-secondary);
+              text-decoration: none;
+              transition: var(--transition);
+              position: relative;
+              overflow: hidden;
+          }
+
+          .notification-dropdown-item::before {
+              content: '';
+              position: absolute;
+              top: 0;
+              left: -100%;
+              width: 100%;
+              height: 100%;
+              background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+              transition: var(--transition);
+          }
+
+          .notification-dropdown-item:hover::before {
+              left: 100%;
+          }
+
+          .notification-dropdown-item:hover {
+              background: var(--bg-hover);
+              color: var(--text-primary);
+              transform: translateX(4px);
+          }
+
+          .notification-dropdown-item.unread {
+              background: rgba(59, 130, 246, 0.05);
+              border-left: 3px solid var(--accent-primary);
+          }
+
+          .notification-content {
+              flex: 1;
+          }
+
+          .notification-title {
+              color: var(--text-primary);
+              font-weight: 600;
+              margin-bottom: 0.25rem;
+              display: flex;
+              align-items: center;
+              gap: 0.5rem;
+          }
+
+          .notification-text {
+              color: var(--text-secondary);
+              font-size: 0.9rem;
+              margin-bottom: 0.5rem;
+              line-height: 1.4;
+          }
+
+          .notification-time {
+              color: var(--text-muted);
+              font-size: 0.8rem;
+          }
+
+          .notification-icon {
+              width: 20px;
+              height: 20px;
+              border-radius: 50%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-size: 0.8rem;
+              flex-shrink: 0;
+          }
+
+          .notification-icon.danger {
+              background: rgba(239, 68, 68, 0.1);
+              color: var(--accent-danger);
+          }
+
+          .notification-icon.warning {
+              background: rgba(245, 158, 11, 0.1);
+              color: var(--accent-warning);
+          }
+
+          .notification-icon.success {
+              background: rgba(16, 185, 129, 0.1);
+              color: var(--accent-success);
+          }
+
+          .notification-icon.primary {
+              background: rgba(59, 130, 246, 0.1);
+              color: var(--accent-primary);
+          }
+
+          .dropdown-actions {
+              padding: 0.15rem 1rem;
+              background: var(--bg-secondary);
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              border-top: 1px solid var(--border-primary);
+          }
+
+          .dropdown-actions a {
+              color: var(--accent-primary);
+              text-decoration: none;
+              font-size: 0.9rem;
+              font-weight: 500;
+              transition: var(--transition);
+              padding: 0.5rem;
+              border-radius: 6px;
+              cursor: pointer;
+          }
+
+          .dropdown-actions a:hover {
+              background: rgba(59, 130, 246, 0.1);
+              color: var(--accent-secondary);
+          }
+
+          .dropdown-actions a.text-danger {
+              color: var(--accent-danger);
+          }
+
+          .dropdown-actions a.text-danger:hover {
+              background: rgba(239, 68, 68, 0.1);
+              color: var(--accent-danger);
+          }
+
+          .dropdown-divider {
+              border-color: var(--border-primary);
+              margin: 0;
+          }
+
+          .badge {
+              background: var(--gradient-primary);
+              color: white;
+              font-size: 0.7rem;
+              padding: 0.25rem 0.5rem;
+              border-radius: 20px;
+              margin-left: auto;
+          }
+
+          .empty-state {
+              padding: 2rem 1.5rem;
+              text-align: center;
+              color: var(--text-muted);
+          }
+
+          .empty-state i {
+              font-size: 2.5rem;
+              margin-bottom: 1rem;
+              color: var(--border-secondary);
+          }
+
+          .empty-state h6 {
+              color: var(--text-secondary);
+              margin-bottom: 0.5rem;
+          }
+
+          .notification-settings-link {
+              display: flex;
+              align-items: center;
+              gap: 0.5rem;
+              padding: 0.75rem 1.5rem;
+              color: var(--text-secondary);
+              text-decoration: none;
+              transition: var(--transition);
+              border-top: 1px solid var(--border-primary);
+              background: var(--bg-secondary);
+          }
+
+          .notification-settings-link:hover {
+              color: var(--accent-primary);
+              background: var(--bg-hover);
+          }
+
+          .notification-settings-link i {
+              transition: var(--transition);
+          }
+
+          .notification-settings-link:hover i {
+              transform: rotate(30deg);
+          }
+
+          @media (max-width: 768px) {
+              .navbar-nav {
+                  background: var(--bg-card);
+                  border-radius: var(--border-radius);
+                  padding: 1rem;
+                  margin-top: 1rem;
+                  border: 1px solid var(--border-primary);
+              }
+
+              .nav-link {
+                  margin-bottom: 0.5rem;
+              }
+
+              .navbar-collapse {
+                  margin-top: 1rem;
+              }
+
+              .dropdown-menu {
+                  position: fixed !important;
+                  top: 80px !important;
+                  right: 20px !important;
+                  left: auto !important;
+                  width: calc(100% - 40px) !important;
+                  max-width: 400px;
+                  margin-top: 0;
+                  z-index: 1050;
+                  height: 500px;
+                  overflow-y: auto;
+              }
+
+              .sign-in-btn {
+                  width: 100%;
+                  margin-top: 1rem;
+              }
+          }
+
+          @media (min-width: 992px) {
+              .dropdown-menu {
+                  max-height: none !important;
+                  overflow-y: visible !important;
+              }
+
+              .sign-in-btn {
+                  margin-left: 1rem;
+              }
+          }
+
+          .role-toggle {
+              margin: 20px auto;
+              max-width: 500px;
+              background: var(--bg-card);
+              border-radius: var(--border-radius);
+              padding: 20px;
+              border: 1px solid var(--border-primary);
+          }
+
+          .role-toggle h3 {
+              text-align: center;
+              margin-bottom: 20px;
+              color: var(--text-primary);
+          }
+
+          .role-btn {
+              width: 100%;
+              margin-bottom: 10px;
+              background: var(--bg-secondary);
+              color: var(--text-primary);
+              border: 1px solid var(--border-primary);
+              padding: 12px;
+              border-radius: var(--border-radius);
+              transition: var(--transition);
+          }
+
+          .role-btn:hover, .role-btn.active {
+              background: var(--gradient-primary);
+              border-color: var(--accent-primary);
+          }
+
+          .user-info {
+              text-align: center;
+              margin-top: 15px;
+              padding-top: 15px;
+              border-top: 1px solid var(--border-primary);
+              color: var(--text-secondary);
+          }
+
+          .sign-in-btn {
+              background: var(--gradient-primary);
+              color: white;
+              border: none;
+              padding: 8px 16px;
+              border-radius: var(--border-radius);
+              font-weight: 500;
+              transition: var(--transition);
+              display: flex;
+              align-items: center;
+              gap: 8px;
+          }
+
+          .sign-in-btn:hover {
+              transform: translateY(-2px);
+              box-shadow: var(--shadow-glow);
+          }
+
+          .sign-in-btn i {
+              font-size: 1rem;
+              transition: var(--transition);
+          }
+
+          .logged-out .profile-section {
+              display: none !important;
+          }
+
+          .logged-out .sign-in-section {
+              display: flex !important;
+          }
+
+          .logged-in .profile-section {
+              display: flex !important;
+          }
+
+          .logged-in .sign-in-section {
+              display: none !important;
+          }
+
+          /* Main Container */
+          .main-container {
+              padding: 20px;
+              min-height: 100vh;
+              max-width: 1200px;
+              margin: 0 auto;
+          }
+
+          /* Page Header */
+          .page-header {
+              margin-bottom: 2rem;
+          }
+
+          .page-title {
+              font-size: 2rem;
+              font-weight: 800;
+              margin-bottom: 0.5rem;
+              background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-primary) 50%, var(--accent-secondary) 100%);
+              -webkit-background-clip: text;
+              -webkit-text-fill-color: transparent;
+              background-clip: text;
+          }
+
+          .page-subtitle {
+              color: var(--text-secondary);
+              font-size: 1rem;
+          }
+
+          /* Filter Tabs */
+          .filter-tabs {
+              display: flex;
+              gap: 8px;
+              margin-bottom: 24px;
+              flex-wrap: wrap;
+          }
+
+          .filter-tab {
+              background: var(--bg-tertiary);
+              border: 1px solid var(--border-primary);
+              color: var(--text-secondary);
+              padding: 8px 16px;
+              border-radius: 20px;
+              font-size: 0.9rem;
+              font-weight: 500;
+              transition: var(--transition);
+              cursor: pointer;
+          }
+
+          .filter-tab:hover {
+              background: var(--bg-hover);
+              color: var(--text-primary);
+          }
+
+          .filter-tab.active {
+              background: var(--gradient-primary);
+              border-color: var(--accent-primary);
+              color: white;
+          }
+
+          /* Search Box */
+          .search-box {
+              position: relative;
+              margin-bottom: 24px;
+              max-width: 400px;
+          }
+
+          .search-input {
+              width: 100%;
+              background: var(--bg-tertiary);
+              border: 1px solid var(--border-primary);
+              color: var(--text-primary);
+              padding: 12px 16px 12px 40px;
+              border-radius: 50px;
+              font-size: 0.9rem;
+              transition: var(--transition);
+          }
+
+          .search-input:focus {
+              outline: none;
+              border-color: var(--accent-primary);
+              box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+              background: white;
+              color: black;
+          }
+
+          .search-icon {
+              position: absolute;
+              left: 16px;
+              top: 50%;
+              transform: translateY(-50%);
+              color: var(--text-muted);
+          }
+
+          /* Status Filter */
+          .status-filter {
+              display: flex;
+              gap: 8px;
+              margin-bottom: 24px;
+              flex-wrap: wrap;
+          }
+
+          .status-btn {
+              background: var(--bg-tertiary);
+              border: 1px solid var(--border-primary);
+              color: var(--text-secondary);
+              padding: 6px 12px;
+              border-radius: 20px;
+              font-size: 0.85rem;
+              font-weight: 500;
+              transition: var(--transition);
+              cursor: pointer;
+          }
+
+          .status-btn:hover {
+              background: var(--bg-hover);
+              color: var(--text-primary);
+          }
+
+          .status-btn.active {
+              background: var(--gradient-primary);
+              border-color: var(--accent-primary);
+              color: white;
+          }
+
+          /* Reports Table */
+          .reports-table {
+              width: 100%;
+              border-collapse: separate;
+              border-spacing: 0;
+              background: var(--bg-card);
+              border-radius: var(--border-radius);
+              overflow: hidden;
+              box-shadow: var(--shadow-lg);
+          }
+
+          .reports-table th {
+              background: var(--bg-tertiary);
+              padding: 16px;
+              text-align: left;
+              font-weight: 600;
+              color: var(--text-secondary);
+              border-bottom: 1px solid var(--border-primary);
+          }
+
+          .reports-table td {
+              padding: 16px;
+              border-bottom: 1px solid var(--border-primary);
+              vertical-align: middle;
+          }
+
+          .reports-table tr:last-child td {
+              border-bottom: none;
+          }
+
+          .reports-table tr:hover {
+              background: var(--bg-hover);
+          }
+
+          /* Status Badges - From Admin Dashboard */
+          .status-badge {
+              padding: 4px 12px;
+              border-radius: 20px;
+              font-size: 0.8rem;
+              font-weight: 600;
+              display: inline-flex;
+              align-items: center;
+              gap: 4px;
+          }
+
+          .status-badge.pending {
+              background: rgba(245, 158, 11, 0.1);
+              color: var(--accent-warning);
+          }
+
+          .status-badge.active {
+              background: rgba(59, 130, 246, 0.1);
+              color: var(--accent-primary);
+          }
+
+          .status-badge.found {
+              background: rgba(16, 185, 129, 0.1);
+              color: var(--accent-success);
+          }
+
+          .status-badge.rejected {
+              background: rgba(239, 68, 68, 0.1);
+              color: var(--accent-danger);
+          }
+
+          /* Case Image - From Admin Dashboard */
+          .case-image {
+              width: 50px;
+              height: 50px;
+              border-radius: 8px;
+              object-fit: cover;
+              margin-right: 12px;
+              border: 2px solid var(--border-primary);
+              transition: var(--transition);
+          }
+
+          .case-image:hover {
+              transform: scale(1.5);
+              z-index: 10;
+              position: relative;
+              box-shadow: var(--shadow-lg);
+          }
+
+          /* Action Buttons */
+          .action-buttons {
+              display: flex;
+              gap: 8px;
+          }
+
+          .action-btn {
+              background: var(--bg-tertiary);
+              border: 1px solid var(--border-primary);
+              color: var(--text-secondary);
+              width: 36px;
+              height: 36px;
+              border-radius: 8px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              transition: var(--transition);
+              cursor: pointer;
+          }
+
+          .action-btn:hover {
+              background: var(--bg-hover);
+              color: var(--text-primary);
+              transform: translateY(-2px);
+          }
+
+          .action-btn.success:hover {
+              border-color: var(--accent-success);
+              color: var(--accent-success);
+          }
+
+          .action-btn.delete:hover {
+              border-color: var(--accent-danger);
+              color: var(--accent-danger);
+          }
+
+          .action-btn.view:hover {
+              border-color: var(--accent-info);
+              color: var(--accent-info);
+          }
+
+          /* Animations */
+          .animate-fade-in {
+              animation: fadeIn 0.8s ease-out;
+          }
+
+          .animate-slide-up {
+              animation: slideUp 0.8s ease-out;
+          }
+
+          @keyframes fadeIn {
+              from { opacity: 0; }
+              to { opacity: 1; }
+          }
+
+          @keyframes slideUp {
+              from {
+                  opacity: 0;
+                  transform: translateY(30px);
+              }
+              to {
+                  opacity: 1;
+                  transform: translateY(0);
+              }
+          }
+
+          /* Responsive Design */
+          @media (max-width: 768px) {
+              .page-title {
+                  font-size: 1.75rem;
+              }
+
+              .reports-table {
+                  display: block;
+                  overflow-x: auto;
+              }
+
+              .action-buttons {
+                  flex-wrap: wrap;
+              }
+
+              .reports-table thead {
+                  display: none;
+              }
+
+              .reports-table tbody tr {
+                  display: block;
+                  margin-bottom: 1rem;
+                  margin-left: 1.4rem;
+                  margin-top: 1rem;
+                  border: 1px solid var(--border-primary);
+                  border-radius: var(--border-radius);
+              }
+
+              .reports-table tbody td {
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                  padding: 12px;
+                  border-bottom: 1px solid var(--border-primary);
+                  text-align: right;
+              }
+
+              .reports-table tbody td:before {
+                  content: attr(data-label);
+                  font-weight: 600;
+                  color: var(--text-secondary);
+                  margin-right: 1rem;
+                  text-align: left;
+              }
+
+              .reports-table tbody td:last-child {
+                  border-bottom: none;
+              }
+
+              .action-buttons {
+                  justify-content: flex-end;
+              }
+          }
+
+          /* Empty State */
+          .empty-state {
+              text-align: center;
+              padding: 60px 20px;
+              color: var(--text-muted);
+              background: var(--bg-card);
+              border-radius: var(--border-radius);
+              margin-top: 20px;
+          }
+
+          .empty-state i {
+              font-size: 4rem;
+              margin-bottom: 20px;
+              opacity: 0.5;
+          }
+
+          /* Age display improvement */
+          .age-display {
+              font-size: 0.85rem;
+              color: var(--text-muted);
+              display: block;
+              margin-top: 4px;
+              font-weight: 500;
+          }
+
+          /* Load More Button Styles */
+          .load-more-container {
+              display: flex;
+              justify-content: center;
+              margin-top: 1.5rem;
+              margin-bottom: 2rem;
+          }
+
+          .load-more-btn {
+              background: var(--bg-card);
+              border: 1px solid var(--border-primary);
+              color: var(--text-primary);
+              font-weight: 500;
+              padding: 12px 24px;
+              border-radius: var(--border-radius);
+              transition: var(--transition);
+              display: block;
+              margin: 20px auto 0;
+              cursor: pointer;
+          }
+
+          .load-more-btn:hover {
+              background: var(--bg-hover);
+              border-color: var(--accent-primary);
+              color: var(--accent-primary);
+          }
+
+          /* Modal Styles - UPDATED FOR RESPONSIVENESS */
+          .modal-content {
+              background: var(--bg-card);
+              border: 1px solid var(--border-primary);
+              border-radius: var(--border-radius);
+              color: var(--text-primary);
+          }
+
+          .modal-header {
+              border-bottom: 1px solid var(--border-primary);
+              padding: 1.25rem;
+          }
+
+          .modal-title {
+              font-weight: 700;
+              font-size: 1.35rem;
+              background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+              -webkit-background-clip: text;
+              -webkit-text-fill-color: transparent;
+              background-clip: text;
+          }
+
+          .modal-body {
+              padding: 1.25rem;
+          }
+
+          .modal-footer {
+              border-top: 1px solid var(--border-primary);
+              padding: 1.25rem;
+              flex-wrap: wrap;
+          }
+
+          .form-label {
+              color: var(--text-secondary);
+              font-weight: 500;
+              margin-bottom: 0.5rem;
+              font-size: 0.95rem;
+          }
+
+          .form-control, .form-select {
+              background: var(--bg-tertiary);
+              border: 1px solid var(--border-primary);
+              color: var(--text-primary);
+              padding: 0.75rem;
+              border-radius: 8px;
+              font-size: 0.95rem;
+          }
+
+          .form-control:focus, .form-select:focus {
+              background: white;
+              border-color: var(--accent-primary);
+              box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+              color: black;
+          }
+
+          textarea.form-control {
+              min-height: 100px;
+          }
+
+          .checkbox-label {
+              display: flex;
+              align-items: center;
+              gap: 0.5rem;
+              color: var(--text-secondary);
+              margin-top: 1rem;
+              font-size: 0.95rem;
+              cursor: pointer;
+          }
+
+          .btn-close {
+              filter: invert(1) grayscale(100%) brightness(200%);
+          }
+
+          .btn-primary {
+              background: var(--gradient-primary);
+              border: none;
+              padding: 0.75rem 1.5rem;
+              font-weight: 600;
+          }
+
+          .btn-primary:hover {
+              background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+              transform: translateY(-2px);
+          }
+
+          .btn-secondary {
+              background: var(--bg-tertiary);
+              border: 1px solid var(--border-primary);
+              color: var(--text-primary);
+              padding: 0.75rem 1.5rem;
+              font-weight: 600;
+          }
+
+          .btn-secondary:hover {
+              background: var(--bg-hover);
+              border-color: var(--accent-primary);
+              color: var(--accent-primary);
+          }
+
+          /* Alert Styles */
+          .alert {
+              border: none;
+              border-radius: 8px;
+              padding: 1rem;
+              margin-bottom: 1rem;
+          }
+
+          .alert-danger {
+              background: rgba(239, 68, 68, 0.1);
+              border: 1px solid rgba(239, 68, 68, 0.3);
+              color: var(--accent-danger);
+          }
+
+          /* Form validation */
+          .is-invalid {
+              border-color: var(--accent-danger) !important;
+          }
+
+          .invalid-feedback {
+              color: var(--accent-danger);
+              font-size: 0.875rem;
+              margin-top: 0.25rem;
+          }
+
+          /* Mobile Responsive Modal Styles */
+          @media (max-width: 576px) {
+              .modal-dialog {
+                  margin: 1rem;
+                  max-width: calc(100% - 2rem);
+              }
+
+              .modal-header {
+                  padding: 1rem;
+              }
+
+              .modal-title {
+                  font-size: 1.2rem;
+              }
+
+              .modal-body {
+                  padding: 1rem;
+              }
+
+              .modal-footer {
+                  padding: 1rem;
+                  flex-direction: column;
+                  gap: 0.5rem;
+              }
+
+              .modal-footer .btn {
+                  width: 100%;
+                  margin: 0;
+              }
+
+              .form-control, .form-select {
+                  padding: 0.6rem;
+              }
+
+              textarea.form-control {
+                  min-height: 80px;
+              }
+
+              .checkbox-label {
+                  font-size: 0.9rem;
+              }
+
+              .modal-content h4 {
+                  font-size: 1.1rem;
+              }
+          }
+
+          /* Improved text visibility in modal */
+          .modal-content .text-muted {
+              color: #999 !important;
+              font-size: 0.85rem;
+              line-height: 1.4;
+          }
+
+          /* Adjust modal size for medium screens */
+          @media (min-width: 577px) and (max-width: 992px) {
+              .modal-dialog {
+                  max-width: 500px;
+              }
+          }
+
+          /* Footer Styles */
+          footer {
+              background: var(--bg-secondary);
+              border-top: 1px solid var(--border-primary);
+              padding: 60px 0 30px;
+              margin-top: auto;
+          }
+
+          .footer-brand {
+              display: flex;
+              align-items: center;
+              margin-bottom: 20px;
+          }
+
+          .footer-brand-text {
+              font-size: 1.25rem;
+              font-weight: 700;
+              color: var(--text-primary);
+          }
+
+          .footer-description {
+              color: var(--text-secondary);
+              margin-bottom: 24px;
+              line-height: 1.6;
+          }
+
+          .footer-section h6 {
+              color: var(--text-primary);
+              font-weight: 600;
+              margin-bottom: 16px;
+          }
+
+          .footer-section ul {
+              list-style: none;
+              padding: 0;
+          }
+
+          .footer-section ul li {
+              margin-bottom: 8px;
+          }
+
+          .footer-section ul li a {
+              color: var(--text-secondary);
+              text-decoration: none;
+              transition: var(--transition);
+          }
+
+          .footer-section ul li a:hover {
+              color: var(--accent-primary);
+          }
+
+          .footer-social a {
+              color: var(--text-secondary);
+              font-size: 1.2rem;
+              margin-right: 16px;
+              transition: var(--transition);
+          }
+
+          .footer-social a:hover {
+              color: var(--accent-primary);
+              transform: translateY(-2px);
+          }
+
+          .footer-bottom {
+              border-top: 1px solid var(--border-primary);
+              padding-top: 24px;
+              margin-top: 40px;
+              text-align: center;
+              color: var(--text-muted);
+              font-size: 0.9rem;
+          }
+
+          /* Back to Top Button */
+          #backToTopBtn {
+              position: fixed;
+              bottom: 30px;
+              right: 30px;
+              z-index: 1000;
+              background: var(--gradient-primary);
+              color: white;
+              border: none;
+              border-radius: 50%;
+              width: 50px;
+              height: 50px;
+              font-size: 1.25rem;
+              cursor: pointer;
+              box-shadow: var(--shadow-lg);
+              display: none;
+              align-items: center;
+              justify-content: center;
+              transition: var(--transition);
+          }
+
+          #backToTopBtn:hover {
+              transform: translateY(-3px) scale(1.1);
+              box-shadow: var(--shadow-glow);
+          }
+      </style>
+</head>
+<body>
+
+<!-- Advanced Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNavbar">
+      <div class="container">
+            <!-- Brand -->
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                  Find<span style="color: var(--accent-primary);">4</span>U
+            </a>
+
+            <!-- Mobile Toggle -->
+            <button class="navbar-toggler ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu" aria-controls="navmenu" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Mobile Icons (notification & profile) -->
+            <div class="d-flex d-lg-none align-items-center gap-2 ms-auto">
+                  <!-- Notification Dropdown (Mobile) - Only shown when logged in -->
+                  <div class="dropdown profile-section">
+                        <a href="#" class="notification-btn" id="mobileNotifDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="margin-left: 8px;">
+                              <i class="bi bi-bell"></i>
+                              <span class="notification-badge">3</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="mobileNotifDropdown" id="mobileNotificationDropdown">
+                              <!-- Content will be dynamically populated -->
+                        </ul>
+                  </div>
+
+                  <!-- Profile Dropdown (Mobile) - Only shown when logged in -->
+                  <div class="dropdown profile-section">
+                        <a href="#" title="Profile" class="profile-btn" id="mobileDropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
+                              <i class="bi bi-person"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="mobileDropdownUser" id="mobileProfileDropdown">
+                              <!-- Content will be dynamically populated -->
+                        </ul>
+                  </div>
+
+                  <!-- Sign In Button (Mobile) - Only shown when logged out -->
+                  <div class="sign-in-section">
+                        <button class="sign-in-btn" id="mobileSignInBtn">
+                              <i class="bi bi-box-arrow-in-right"></i>
+                              <span>Sign In</span>
+                        </button>
+                  </div>
+            </div>
+
+            <!-- Navigation -->
+            <div class="collapse navbar-collapse" id="navmenu">
+                  <!-- Centered Navigation Links -->
+                  <ul class="navbar-nav mx-auto">
+                        <li class="nav-item">
+                              <a class="nav-link" href="homepage.html#missing">Missing Persons</a>
+                        </li>
+                        <li class="nav-item">
+                              <a class="nav-link" href="homepage.html#pricing">Pricing</a>
+                        </li>
+                        <li class="nav-item">
+                              <a class="nav-link" href="homepage.html#faq">FAQ</a>
+                        </li>
+                        <li class="nav-item">
+                              <a class="nav-link " href="search-all-people-page.html">Search</a>
+                        </li>
+                  </ul>
+
+
+                  <!-- Right Side Actions -->
+                  <div class="d-none d-lg-flex align-items-center gap-3">
+                        <!-- Notification Dropdown (Desktop) - Only shown when logged in -->
+                        <div class="dropdown profile-section">
+                              <a href="#" class="notification-btn" id="desktopNotifDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="margin-left: 8px; margin-top: 8px;">
+                                    <i class="bi bi-bell"></i>
+                                    <span class="notification-badge">3</span>
+                              </a>
+                              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="desktopNotifDropdown" id="desktopNotificationDropdown">
+                                    <!-- Content will be dynamically populated -->
+                              </ul>
+                        </div>
+
+                        <!-- Profile Dropdown (Desktop) - Only shown when logged in -->
+                        <div class="dropdown d-inline-block profile-section">
+                              <a href="#" title="Profile" class="profile-btn" id="desktopDropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-person"></i>
+                              </a>
+                              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="desktopDropdownUser" id="desktopProfileDropdown">
+                                    <!-- Content will be dynamically populated -->
+                              </ul>
+                        </div>
+
+                        <!-- Sign In Button (Desktop) - Only shown when logged out -->
+                        <div class="sign-in-section">
+                              <button id="desktopSignInBtn" class="btn btn-outline-primary">Sign In</button>
+                        </div>
+                  </div>
+            </div>
+      </div>
+</nav>
+
+<main>
+      <!-- Main Container -->
+      <div class="main-container">
+            <!-- Page Header -->
+            <div class="page-header animate-fade-in">
+                  <h1 class="page-title">My Reports</h1>
+                  <p class="page-subtitle">Manage the missing person and lost pet reports you've submitted</p>
+            </div>
+
+            <!-- Search Box -->
+            <div class="search-box animate-slide-up">
+                  <i class="bi bi-search search-icon"></i>
+                  <input type="text" class="search-input" placeholder="Search reports...">
+            </div>
+
+            <!-- Status Filter -->
+            <div class="status-filter animate-slide-up">
+                  <span class="text-secondary me-2">Status:</span>
+                  <div class="status-btn active" data-status="all">All</div>
+                  <div class="status-btn" data-status="pending">Pending</div>
+                  <div class="status-btn" data-status="active">Active</div>
+                  <div class="status-btn" data-status="found">Found</div>
+                  <div class="status-btn" data-status="rejected">Rejected</div>
+            </div>
+
+            <!-- Reports Table -->
+            <div class="table-responsive animate-slide-up">
+                  <table class="reports-table">
+                        <thead>
+                        <tr>
+                              <th>IMAGE</th>
+                              <th>NAME</th>
+                              <th>DATE REPORTED</th>
+                              <th>STATUS</th>
+                              <th>ACTIONS</th>
+                        </tr>
+                        </thead>
+                        <tbody id="reports-body">
+                        <!-- Table content will be populated by JavaScript -->
+                        </tbody>
+                  </table>
+            </div>
+
+            <!-- Load More Button -->
+            <div class="load-more-container" id="load-more-container">
+                  <button class="load-more-btn" id="load-more-reports">
+                        <i class="bi bi-arrow-clockwise me-2"></i>
+                        Load More Reports
+                  </button>
+            </div>
+      </div>
+</main>
+
+<!-- Found Information Modal -->
+<div class="modal fade" id="foundModal" tabindex="-1" aria-labelledby="foundModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+            <div class="modal-content">
+                  <div class="modal-header">
+                        <h5 class="modal-title" id="foundModalLabel" style="color: white;">Found Information</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                        <div class="alert alert-danger d-none" id="errorAlert">
+                              <i class="bi bi-exclamation-triangle me-2"></i>
+                              <span id="errorMessage">Please fill in all required fields</span>
+                        </div>
+
+                        <form id="foundForm">
+                              <div class="mb-4">
+                                    <div class="row mb-3">
+                                          <div class="col-md-6">
+                                                <label for="dateFound" class="form-label">Date Found *</label>
+                                                <input type="date" class="form-control" id="dateFound" required>
+                                                <div class="invalid-feedback">Please select a date</div>
+                                          </div>
+                                          <div class="col-md-6">
+                                                <label for="locationFound" class="form-label">Location Found *</label>
+                                                <input type="text" class="form-control" id="locationFound" placeholder="City, State" required>
+                                                <div class="invalid-feedback">Please enter a location</div>
+                                          </div>
+                                    </div>
+
+                                    <hr class="my-4">
+
+                                    <div class="mb-3">
+                                          <label for="recoveryDetails" class="form-label">Circumstances of Recovery *</label>
+                                          <textarea class="form-control" id="recoveryDetails" rows="3" placeholder="Please describe how the person was found and any relevant details." required></textarea>
+                                          <div class="invalid-feedback">Please provide recovery details</div>
+                                    </div>
+
+                                    <hr class="my-4">
+
+                                    <div class="mb-3">
+                                          <label for="additionalInfo" class="form-label">Additional Information</label>
+                                          <textarea class="form-control" id="additionalInfo" rows="2" placeholder="Any other details you'd like to share."></textarea>
+                                    </div>
+
+                                    <div class="checkbox-label">
+                                          <input type="checkbox" id="shareSuccess" class="form-check-input">
+                                          <label for="shareSuccess" class="form-check-label">Share as a Success Story</label>
+                                    </div>
+                                    <small class="text-muted">Allow us to share this case as a success story to inspire hope in others. Personal details can be anonymized upon request.</small>
+                              </div>
+                        </form>
+                  </div>
+                  <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary" id="submitFoundInfo">Submit Found Information</button>
+                  </div>
+            </div>
+      </div>
+</div>
+
+<!-- Advanced Footer -->
+<footer>
+      <div class="container">
+            <div class="row">
+                  <div class="col-md-4 mb-4">
+                        <div class="footer-brand">
+                              <div class="footer-brand-text">Find4U</div>
+                        </div>
+                        <p class="footer-description">
+                              Helping communities reunite missing persons with their loved ones through
+                              collaborative effort and advanced technology.
+                        </p>
+                        <div class="footer-social">
+                              <a href="#"><i class="bi bi-facebook"></i></a>
+                              <a href="#"><i class="bi bi-twitter"></i></a>
+                              <a href="#"><i class="bi bi-instagram"></i></a>
+                              <a href="#"><i class="bi bi-linkedin"></i></a>
+                        </div>
+                  </div>
+
+                  <div class="col-md-4 mb-4">
+                        <div class="footer-section">
+                              <h6>Quick Links</h6>
+                              <ul>
+                                    <li><a href="search-all-people-page.html">Search Missing Persons</a></li>
+                                    <li><a href="case-report-page.html">Report Missing Person</a></li>
+                                    <li><a href="homepage.html">How It Works</a></li>
+                                    <li><a href="success-stories-page.html">Success Stories</a></li>
+                              </ul>
+                        </div>
+                  </div>
+
+                  <div class="col-md-4 mb-4">
+                        <div class="footer-section">
+                              <h6>Emergency Contact</h6>
+                              <p class="mb-2 text-secondary">
+                                    <i class="bi bi-telephone-fill me-2"></i>
+                                    <strong>24/7 Hotline:</strong><br>
+                                    1-800-FIND-4U (1-800-346-348)
+                              </p>
+                              <p class="mb-3">
+                                    <i class="bi bi-envelope-fill me-2"></i>
+                                    <strong>Email Support:</strong><br>
+                                    <a class="text-secondary" href="mailto:help@find4u.org">help@find4u.org</a>
+                              </p>
+                        </div>
+                  </div>
+            </div>
+
+            <div class="footer-bottom">
+                  <p>&copy; 2024 Find4U. All rights reserved. |
+                        <a href="privacy-page.html" style="color: var(--text-muted);">Privacy Policy</a> |
+                        <a href="terms-page.html" style="color: var(--text-muted);">Terms of Service</a>
+                  </p>
+            </div>
+      </div>
+</footer>
+
+<!-- Back to Top Button -->
+<button id="backToTopBtn" title="Back to Top">
+      <i class="bi bi-arrow-up"></i>
+</button>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+        // Main data structure for reports
+        const reportsData = [
+                {
+                        id: 1,
+                        image: "https://randomuser.me/api/portraits/men/32.jpg",
+                        name: "David Chen",
+                        date: "8/13/2025",
+                        status: "active"
+                },
+                {
+                        id: 2,
+                        image: "https://randomuser.me/api/portraits/women/44.jpg",
+                        name: "Sarah Johnson",
+                        date: "8/11/2025",
+                        status: "pending"
+                },
+                {
+                        id: 3,
+                        image: "https://images.unsplash.com/photo-1533738363-b7f9aef128ce?w=100&h=100&fit=crop&crop=center",
+                        name: "Luna",
+                        date: "8/7/2025",
+                        status: "active"
+                },
+                {
+                        id: 4,
+                        image: "https://images.unsplash.com/photo-1552053831-71594a27632d?w=100&h=100&fit=crop&crop=center",
+                        name: "Max",
+                        date: "8/1/2025",
+                        status: "found"
+                },
+                {
+                        id: 5,
+                        image: "https://randomuser.me/api/portraits/women/63.jpg",
+                        name: "Emily Rodriguez",
+                        date: "7/24/2025",
+                        status: "found"
+                },
+                {
+                        id: 6,
+                        image: "https://randomuser.me/api/portraits/men/22.jpg",
+                        name: "James Wilson",
+                        date: "7/20/2025",
+                        status: "rejected"
+                }
+        ];
+
+        // Additional reports for load more functionality
+        const additionalReports = [
+                {
+                        id: 7,
+                        image: "https://randomuser.me/api/portraits/women/28.jpg",
+                        name: "Sophia Williams",
+                        date: "7/15/2025",
+                        status: "active"
+                },
+                {
+                        id: 8,
+                        image: "https://images.unsplash.com/photo-1543852786-1cf6624b9987?w=100&h=100&fit=crop&crop=center",
+                        name: "Mittens",
+                        date: "7/10/2025",
+                        status: "found"
+                },
+                {
+                        id: 9,
+                        image: "https://randomuser.me/api/portraits/men/45.jpg",
+                        name: "Robert Brown",
+                        date: "7/5/2025",
+                        status: "pending"
+                }
+        ];
+
+        // Store the current report being marked as found
+        let currentReport = null;
+
+        // Function to render reports in the table
+        function renderReports(reports) {
+                const reportsBody = document.getElementById('reports-body');
+                reportsBody.innerHTML = ''; // Clear existing content
+
+                if (reports.length === 0) {
+                        // Show empty state if no reports
+                        const emptyState = document.createElement('tr');
+                        emptyState.innerHTML = `
+                <td colspan="5">
+                    <div class="empty-state">
+                        <i class="bi bi-inbox"></i>
+                        <h3>No Reports Found</h3>
+                        <p>No reports match your current filters.</p>
+                    </div>
+                </td>
+            `;
+                        reportsBody.appendChild(emptyState);
+                        return;
+                }
+
+                // Add reports to table
+                reports.forEach(report => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                <td data-label="Image">
+                    <img src="${report.image}" alt="${report.name}" class="case-image">
+                </td>
+                <td data-label="Name">${report.name}</td>
+                <td data-label="Date Reported">${report.date}</td>
+                <td data-label="Status"><span class="status-badge ${report.status}">${report.status.charAt(0).toUpperCase() + report.status.slice(1)}</span></td>
+                <td data-label="Actions">
+                    <div class="action-buttons">
+                        <button class="action-btn view" title="View"><i class="bi bi-eye"></i></button>
+                        <button class="action-btn success mark-found" title="Found Information" data-id="${report.id}"><i class="bi bi-check-lg"></i></button>
+                        <button class="action-btn delete" title="Delete"><i class="bi bi-trash"></i></button>
+                    </div>
+                </td>
+            `;
+                        reportsBody.appendChild(row);
+                });
+
+                // Add event listeners to action buttons
+                addActionButtonListeners();
+        }
+
+        // Function to add event listeners to action buttons
+        function addActionButtonListeners() {
+                const actionButtons = document.querySelectorAll('.action-btn');
+                actionButtons.forEach(btn => {
+                        btn.addEventListener('click', function() {
+                                const action = this.title.toLowerCase();
+                                const row = this.closest('tr');
+                                const name = row.querySelector('td:nth-child(2)').textContent.trim();
+
+                                // Different actions based on button type
+                                switch(action) {
+                                        case 'view':
+                                                alert(`Viewing details for: ${name}`);
+                                                break;
+                                        case 'found information':
+                                                const reportId = this.getAttribute('data-id');
+                                                currentReport = reportsData.find(report => report.id == reportId);
+                                                showFoundModal(currentReport);
+                                                break;
+                                        case 'delete':
+                                                if(confirm(`Are you sure you want to delete the report for ${name}?`)) {
+                                                        row.style.opacity = '0';
+                                                        setTimeout(() => {
+                                                                row.remove();
+                                                                // Check if table is empty
+                                                                if(document.querySelectorAll('.reports-table tbody tr').length === 0) {
+                                                                        const emptyState = document.createElement('tr');
+                                                                        emptyState.innerHTML = `
+                                        <td colspan="5">
+                                            <div class="empty-state">
+                                                <i class="bi bi-inbox"></i>
+                                                <h3>No Reports Found</h3>
+                                                <p>No reports match your current filters.</p>
+                                            </div>
+                                        </td>
+                                    `;
+                                                                        document.getElementById('reports-body').appendChild(emptyState);
+                                                                }
+                                                        }, 300);
+                                                }
+                                                break;
+                                }
+                        });
+                });
+        }
+
+        // Function to show the found modal
+        function showFoundModal(report) {
+                // Set today's date as default
+                const today = new Date();
+                const formattedDate = today.toISOString().split('T')[0];
+                document.getElementById('dateFound').value = formattedDate;
+
+                // Clear other fields
+                document.getElementById('locationFound').value = '';
+                document.getElementById('recoveryDetails').value = '';
+                document.getElementById('additionalInfo').value = '';
+                document.getElementById('shareSuccess').checked = false;
+
+                // Hide error alert
+                document.getElementById('errorAlert').classList.add('d-none');
+
+                // Remove validation classes
+                document.querySelectorAll('.is-invalid').forEach(el => {
+                        el.classList.remove('is-invalid');
+                });
+
+                // Show the modal
+                const foundModal = new bootstrap.Modal(document.getElementById('foundModal'));
+                foundModal.show();
+        }
+
+        // Function to validate the found form
+        function validateFoundForm() {
+                const dateFound = document.getElementById('dateFound');
+                const locationFound = document.getElementById('locationFound');
+                const recoveryDetails = document.getElementById('recoveryDetails');
+                const errorAlert = document.getElementById('errorAlert');
+
+                let isValid = true;
+
+                // Remove existing validation classes
+                [dateFound, locationFound, recoveryDetails].forEach(field => {
+                        field.classList.remove('is-invalid');
+                });
+
+                // Validate required fields
+                if (!dateFound.value) {
+                        dateFound.classList.add('is-invalid');
+                        isValid = false;
+                }
+
+                if (!locationFound.value.trim()) {
+                        locationFound.classList.add('is-invalid');
+                        isValid = false;
+                }
+
+                if (!recoveryDetails.value.trim()) {
+                        recoveryDetails.classList.add('is-invalid');
+                        isValid = false;
+                }
+
+                // Show error message if validation fails
+                if (!isValid) {
+                        errorAlert.classList.remove('d-none');
+                        errorAlert.textContent = 'Please fill in all required fields';
+                } else {
+                        errorAlert.classList.add('d-none');
+                }
+
+                return isValid;
+        }
+
+        // Function to filter reports by status
+        function filterReports(status) {
+                if (status === 'all') {
+                        return [...reportsData]; // Return a copy of the main data
+                } else {
+                        return reportsData.filter(report => report.status === status);
+                }
+        }
+
+        // Notification data structure
+        let notifications = [
+                {
+                        id: 1,
+                        title: "Case Update - Urgent",
+                        text: "Critical information received for a case you're following.",
+                        time: "2 minutes ago",
+                        icon: "bi-exclamation-triangle",
+                        type: "danger",
+                        unread: true
+                },
+                {
+                        id: 2,
+                        title: "New Case Nearby",
+                        text: "New missing person case reported within 5 miles of your location.",
+                        time: "1 hour ago",
+                        icon: "bi-geo-alt",
+                        type: "warning",
+                        unread: true
+                },
+                {
+                        id: 3,
+                        title: "Case Resolved",
+                        text: "Great news! A case you're following has been resolved.",
+                        time: "3 hours ago",
+                        icon: "bi-check-circle",
+                        type: "success",
+                        unread: false
+                }
+        ];
+
+        // User management
+        let currentUser = {
+                name: "Admin User",
+                email: "admin@find4u.org",
+                isAdmin: true,
+                isLoggedIn: true
+        };
+
+        // let currentUser = [];
+
+        // Function to generate notification HTML
+        function generateNotificationHTML(notification) {
+                return `
+            <a class="notification-dropdown-item ${notification.unread ? 'unread' : ''}" href="#" data-id="${notification.id}">
+                <div class="notification-icon ${notification.type}">
+                    <i class="bi ${notification.icon}"></i>
+                </div>
+                <div class="notification-content">
+                    <div class="notification-title">${notification.title}</div>
+                    <div class="notification-text">${notification.text}</div>
+                    <div class="notification-time">${notification.time}</div>
+                </div>
+            </a>
+        `;
+        }
+
+        // Function to update notification dropdowns
+        function updateNotificationDropdowns() {
+                const unreadCount = notifications.filter(n => n.unread).length;
+
+                // Update notification badges
+                document.querySelectorAll('.notification-badge').forEach(badge => {
+                        badge.textContent = unreadCount;
+                        badge.style.display = unreadCount > 0 ? 'block' : 'none';
+                });
+
+                // Generate notification HTML
+                let notificationsHTML = `
+            <li class="dropdown-header">
+                <div class="fw-bold">Notifications</div>
+                <small class="text-muted">${unreadCount} new alerts</small>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+        `;
+
+                if (notifications.length > 0) {
+                        notifications.forEach(notification => {
+                                notificationsHTML += `<li>${generateNotificationHTML(notification)}</li>`;
+                        });
+                } else {
+                        notificationsHTML += `
+                <li class="empty-state">
+                    <i class="bi bi-bell-slash"></i>
+                    <h6>No notifications</h6>
+                    <p>You're all caught up!</p>
+                </li>
+            `;
+                }
+
+                notificationsHTML += `
+            <li><hr class="dropdown-divider"></li>
+            <li class="dropdown-actions">
+                <a href="#" class="markAllRead">Mark all as read</a>
+                <a href="#" class="text-danger clearAll">Clear all</a>
+            </li>
+            <li>
+                <a href="notification-settings.html" class="notification-settings-link">
+                    <i class="bi bi-gear"></i> Notification Settings
+                </a>
+            </li>
+        `;
+
+                // Update both notification dropdowns
+                document.getElementById('mobileNotificationDropdown').innerHTML = notificationsHTML;
+                document.getElementById('desktopNotificationDropdown').innerHTML = notificationsHTML;
+
+                // Reattach event listeners
+                attachNotificationEventListeners();
+        }
+
+        // Function to update profile dropdown based on user role
+        function updateProfileDropdown() {
+                if (currentUser.length === 0) {
+                        // Hide profile dropdowns or show login prompt
+                        document.querySelectorAll('.profile-section').forEach(el => {
+                                el.style.display = 'none';
+                        });
+                        return;
+                }
+
+                const dropdownContent = `
+                  <li class="dropdown-header">
+                      <div class="fw-bold">${currentUser.name}</div>
+                      <small class="text-muted">${currentUser.email}</small>
+                  </li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li>
+                      <a class="dropdown-item" href="#">
+                          <i class="bi bi-person"></i>
+                          Profile
+                      </a>
+                  </li>
+                  <li>
+                      <a class="dropdown-item" href="#">
+                          <i class="bi bi-folder"></i>
+                          My Cases
+                      </a>
+                  </li>
+                  <li>
+                      <a class="dropdown-item" href="#">
+                          <i class="bi bi-heart"></i>
+                          Following
+                      </a>
+                  </li>
+                  <li>
+                      <a class="dropdown-item" href="payment-history-done.html">
+                          <i class="bi bi-receipt"></i>
+                          Payment History
+                      </a>
+                  </li>
+                  <li>
+                      <a class="dropdown-item" href="settings.html">
+                          <i class="bi bi-gear"></i>
+                          Settings
+                      </a>
+                  </li>
+                  ${currentUser.isAdmin ? `
+                  <li>
+                      <a class="dropdown-item" href="admin-dashboard.html">
+                          <i class="bi bi-grid-3x3-gap"></i>
+                          Admin Dashboard
+                      </a>
+                  </li>
+                  ` : ''}
+                  <li><hr class="dropdown-divider"></li>
+                  <li>
+                      <a class="dropdown-item text-danger" href="#" id="signOutBtn">
+                          <i class="bi bi-box-arrow-right"></i>
+                          Sign Out
+                      </a>
+                  </li>
+              `;
+
+                // Update both dropdowns (mobile and desktop)
+                document.getElementById('mobileProfileDropdown').innerHTML = dropdownContent;
+                document.getElementById('desktopProfileDropdown').innerHTML = dropdownContent;
+
+                // Reattach event listeners
+                document.querySelectorAll('#signOutBtn').forEach(btn => {
+                        btn.addEventListener('click', handleSignOut);
+                });
+        }
+
+        // Function to update login state UI
+        function updateLoginState() {
+                if (currentUser && currentUser.isLoggedIn){
+                        document.body.classList.add('logged-in');
+                        document.body.classList.remove('logged-out');
+                } else {
+                        document.body.classList.add('logged-out');
+                        document.body.classList.remove('logged-in');
+                }
+        }
+
+        // Function to attach notification event listeners
+        function attachNotificationEventListeners() {
+                // Mark all as read functionality
+                document.querySelectorAll('.markAllRead').forEach(btn => {
+                        btn.addEventListener('click', function(e) {
+                                e.preventDefault();
+
+                                // Mark all notifications as read
+                                notifications = notifications.map(n => ({...n, unread: false}));
+
+                                // Update UI
+                                updateNotificationDropdowns();
+
+                                // Show feedback
+                                this.textContent = 'All marked as read';
+                                setTimeout(() => {
+                                        this.textContent = 'Mark all as read';
+                                }, 2000);
+                        });
+                });
+
+                // Clear all functionality
+                document.querySelectorAll('.clearAll').forEach(btn => {
+                        btn.addEventListener('click', function(e) {
+                                e.preventDefault();
+
+                                if (confirm('Are you sure you want to clear all notifications?')) {
+                                        // Clear all notifications
+                                        notifications = [];
+
+                                        // Update UI
+                                        updateNotificationDropdowns();
+                                }
+                        });
+                });
+
+                // Individual notification click
+                document.querySelectorAll('.notification-dropdown-item').forEach(item => {
+                        item.addEventListener('click', function(e) {
+                                e.preventDefault();
+
+                                const notificationId = parseInt(this.getAttribute('data-id'));
+
+                                // Mark this notification as read
+                                notifications = notifications.map(n =>
+                                        n.id === notificationId ? {...n, unread: false} : n
+                                );
+
+                                // Update UI
+                                updateNotificationDropdowns();
+                        });
+                });
+        }
+
+        // Role Check functionality
+        function checkUser(){
+                if (currentUser.isAdmin) {
+                        currentUser = {
+                                ...currentUser,
+                                name: "Admin User",
+                                email: "admin@find4u.org",
+                                isAdmin: true
+                        };
+                }else{
+                        currentUser = {
+                                ...currentUser,
+                                name: "Regular User",
+                                email: "user@find4u.org",
+                                isAdmin: false
+                        };
+                }
+                updateProfileDropdown();
+
+        }
+
+        // Sign out functionality
+        function handleSignOut(e) {
+                e.preventDefault();
+
+                if (confirm('Are you sure you want to sign out?')) {
+                        // Add loading state
+                        const originalText = this.innerHTML;
+                        this.innerHTML = '<i class="bi bi-arrow-repeat"></i> Signing out...';
+
+                        // Simulate sign out process
+                        setTimeout(() => {
+                                currentUser.isLoggedIn = false;
+                                updateLoginState();
+                                alert('You have been signed out successfully!');
+                                this.innerHTML = originalText;
+                        }, 1500);
+                }
+        }
+
+        // Sign in functionality
+        function handleSignIn() {
+                // Simulate sign in process
+                const signInBtn = document.getElementById('mobileSignInBtn');
+                const originalText = signInBtn.innerHTML;
+
+                setTimeout(() => {
+                        currentUser.isLoggedIn = true;
+                        updateLoginState();
+                        alert('You have been signed in successfully!');
+                        signInBtn.innerHTML = originalText;
+                }, 1500);
+        }
+
+        // Back to top button functionality
+        const backToTopBtn = document.getElementById('backToTopBtn');
+
+        window.addEventListener('scroll', () => {
+                if (window.pageYOffset > 300) {
+                        backToTopBtn.style.display = 'flex';
+                } else {
+                        backToTopBtn.style.display = 'none';
+                }
+        });
+
+        backToTopBtn.addEventListener('click', () => {
+                window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+                // Initial render of all reports
+                renderReports(reportsData);
+
+                // Status filter functionality
+                const statusButtons = document.querySelectorAll('.status-btn');
+                const loadMoreContainer = document.getElementById('load-more-container');
+
+                statusButtons.forEach(btn => {
+                        btn.addEventListener('click', function() {
+                                statusButtons.forEach(b => b.classList.remove('active'));
+                                this.classList.add('active');
+
+                                const status = this.getAttribute('data-status');
+                                const filteredReports = filterReports(status);
+                                renderReports(filteredReports);
+
+                                // Show load more button only for "All" filter
+                                if (status === 'all') {
+                                        loadMoreContainer.style.display = 'flex';
+                                } else {
+                                        loadMoreContainer.style.display = 'none';
+                                }
+                        });
+                });
+
+                // Search functionality
+                const searchInput = document.querySelector('.search-input');
+                searchInput.addEventListener('keyup', function() {
+                        const searchTerm = this.value.toLowerCase();
+                        const activeStatus = document.querySelector('.status-btn.active').getAttribute('data-status');
+                        let filteredReports = filterReports(activeStatus);
+
+                        if (searchTerm) {
+                                filteredReports = filteredReports.filter(report =>
+                                        report.name.toLowerCase().includes(searchTerm)
+                                );
+                        }
+
+                        renderReports(filteredReports);
+                });
+
+                // Load more functionality
+                const loadMoreBtn = document.getElementById('load-more-reports');
+                let loadedCount = 0;
+
+                loadMoreBtn.addEventListener('click', function() {
+                        // Add loading state
+                        const originalText = this.innerHTML;
+                        this.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status"></span>Loading...';
+                        this.disabled = true;
+
+                        // Simulate loading delay
+                        setTimeout(() => {
+                                // Add additional reports to main data
+                                if (loadedCount < additionalReports.length) {
+                                        const report = additionalReports[loadedCount];
+                                        reportsData.push(report);
+                                        loadedCount++;
+
+                                        // Re-render with updated data
+                                        const activeStatus = document.querySelector('.status-btn.active').getAttribute('data-status');
+                                        const filteredReports = filterReports(activeStatus);
+                                        renderReports(filteredReports);
+
+                                        // Hide button if no more reports to load
+                                        if (loadedCount >= additionalReports.length) {
+                                                this.style.display = 'none';
+                                        }
+                                }
+
+                                // Restore button text
+                                this.innerHTML = originalText;
+                                this.disabled = false;
+                        }, 800);
+                });
+
+                // Submit found information
+                document.getElementById('submitFoundInfo').addEventListener('click', function() {
+                        const dateFound = document.getElementById('dateFound').value;
+                        const locationFound = document.getElementById('locationFound').value;
+                        const recoveryDetails = document.getElementById('recoveryDetails').value;
+
+                        // Validate form
+                        if (!validateFoundForm()) {
+                                return;
+                        }
+
+                        // Update the report status to "found"
+                        if (currentReport) {
+                                currentReport.status = 'found';
+
+                                // Re-render with updated data
+                                const activeStatus = document.querySelector('.status-btn.active').getAttribute('data-status');
+                                const filteredReports = filterReports(activeStatus);
+                                renderReports(filteredReports);
+
+                                // Close the modal
+                                const foundModal = bootstrap.Modal.getInstance(document.getElementById('foundModal'));
+                                foundModal.hide();
+
+                                // Show success message
+                                alert(`Successfully marked ${currentReport.name} as found!`);
+                        }
+                });
+
+                // Real-time validation for form fields
+                document.querySelectorAll('#foundForm input, #foundForm textarea').forEach(input => {
+                        input.addEventListener('input', function() {
+                                if (this.hasAttribute('required')) {
+                                        const value = this.value.trim();
+
+                                        this.classList.remove('is-invalid');
+
+                                        if (value) {
+                                                document.getElementById('errorAlert').classList.add('d-none');
+                                        }
+                                }
+                        });
+                });
+
+                // Initialize the dropdowns
+                checkUser();
+                updateNotificationDropdowns();
+                updateProfileDropdown();
+                updateLoginState();
+
+                // Add event listeners to sign in buttons
+                document.getElementById('mobileSignInBtn').addEventListener('click', handleSignIn);
+                document.getElementById('desktopSignInBtn').addEventListener('click', handleSignIn);
+
+                // Navbar scroll effect
+                window.addEventListener('scroll', () => {
+                        const navbar = document.getElementById('mainNavbar');
+                        if (window.scrollY > 50) {
+                                navbar.style.background = 'rgba(10, 10, 10, 0.98)';
+                                navbar.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.3)';
+                        } else {
+                                navbar.style.background = 'rgba(10, 10, 10, 0.95)';
+                                navbar.style.boxShadow = 'none';
+                        }
+                });
+        });
+</script>
+
+</body>
+</html>
+
