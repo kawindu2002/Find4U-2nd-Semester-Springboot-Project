@@ -1,7 +1,7 @@
 package com.find4u.find4u2ndsemesterspringbootproject.service;
 
-import com.kp.find4uspringbootproject.dto.UserDTO;
-import com.kp.find4uspringbootproject.enums.UserStatus;
+import com.find4u.find4u2ndsemesterspringbootproject.dto.UserDTO;
+import com.find4u.find4u2ndsemesterspringbootproject.enums.UserStatus;
 
 import java.util.List;
 

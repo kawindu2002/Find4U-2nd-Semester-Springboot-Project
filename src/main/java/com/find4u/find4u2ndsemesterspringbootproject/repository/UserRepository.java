@@ -1,7 +1,7 @@
 package com.find4u.find4u2ndsemesterspringbootproject.repository;
 
-import com.kp.find4uspringbootproject.entity.User;
-import com.kp.find4uspringbootproject.enums.UserStatus;
+import com.find4u.find4u2ndsemesterspringbootproject.entity.User;
+import com.find4u.find4u2ndsemesterspringbootproject.enums.UserStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

@@ -1,11 +1,11 @@
 package com.find4u.find4u2ndsemesterspringbootproject.service.impl;
 
-import com.kp.find4uspringbootproject.dto.MissingPersonDTO;
-import com.kp.find4uspringbootproject.entity.MissingPerson;
-import com.kp.find4uspringbootproject.enums.PersonStatus;
-import com.kp.find4uspringbootproject.exception.NotFoundException;
-import com.kp.find4uspringbootproject.repository.MissingPersonRepository;
-import com.kp.find4uspringbootproject.service.MissingPersonService;
+import com.find4u.find4u2ndsemesterspringbootproject.dto.MissingPersonDTO;
+import com.find4u.find4u2ndsemesterspringbootproject.entity.MissingPerson;
+import com.find4u.find4u2ndsemesterspringbootproject.enums.PersonStatus;
+import com.find4u.find4u2ndsemesterspringbootproject.exception.NotFoundException;
+import com.find4u.find4u2ndsemesterspringbootproject.repository.MissingPersonRepository;
+import com.find4u.find4u2ndsemesterspringbootproject.service.MissingPersonService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;

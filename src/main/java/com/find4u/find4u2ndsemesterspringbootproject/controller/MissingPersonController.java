@@ -1,9 +1,9 @@
 package com.find4u.find4u2ndsemesterspringbootproject.controller;
 
-import com.kp.find4uspringbootproject.dto.APIResponse;
-import com.kp.find4uspringbootproject.dto.MissingPersonDTO;
-import com.kp.find4uspringbootproject.enums.PersonStatus;
-import com.kp.find4uspringbootproject.service.MissingPersonService;
+import com.find4u.find4u2ndsemesterspringbootproject.dto.APIResponse;
+import com.find4u.find4u2ndsemesterspringbootproject.dto.MissingPersonDTO;
+import com.find4u.find4u2ndsemesterspringbootproject.enums.PersonStatus;
+import com.find4u.find4u2ndsemesterspringbootproject.service.MissingPersonService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

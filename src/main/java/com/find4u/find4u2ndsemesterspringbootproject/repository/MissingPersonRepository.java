@@ -1,7 +1,7 @@
 package com.find4u.find4u2ndsemesterspringbootproject.repository;
 
-import com.kp.find4uspringbootproject.entity.MissingPerson;
-import com.kp.find4uspringbootproject.enums.PersonStatus;
+import com.find4u.find4u2ndsemesterspringbootproject.entity.MissingPerson;
+import com.find4u.find4u2ndsemesterspringbootproject.enums.PersonStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

@@ -1,9 +1,9 @@
 
 package com.find4u.find4u2ndsemesterspringbootproject.entity;
 
-import com.kp.find4uspringbootproject.enums.Gender;
-import com.kp.find4uspringbootproject.enums.PersonStatus;
-import com.kp.find4uspringbootproject.enums.YesNo;
+import com.find4u.find4u2ndsemesterspringbootproject.enums.Gender;
+import com.find4u.find4u2ndsemesterspringbootproject.enums.PersonStatus;
+import com.find4u.find4u2ndsemesterspringbootproject.enums.YesNo;
 import jakarta.persistence.*;
 import lombok.*;
 

@@ -1,6 +1,6 @@
 package com.find4u.find4u2ndsemesterspringbootproject.service;
 
-import com.kp.find4uspringbootproject.dto.FaqDTO;
+import com.find4u.find4u2ndsemesterspringbootproject.dto.FaqDTO;
 
 import java.util.List;
 

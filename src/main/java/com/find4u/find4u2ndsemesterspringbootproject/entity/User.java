@@ -1,7 +1,7 @@
 package com.find4u.find4u2ndsemesterspringbootproject.entity;
 
-import com.kp.find4uspringbootproject.enums.Role;
-import com.kp.find4uspringbootproject.enums.UserStatus;
+import com.find4u.find4u2ndsemesterspringbootproject.enums.Role;
+import com.find4u.find4u2ndsemesterspringbootproject.enums.UserStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;

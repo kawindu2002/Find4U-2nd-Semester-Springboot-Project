@@ -1,8 +1,8 @@
 package com.find4u.find4u2ndsemesterspringbootproject.controller;
 
-import com.kp.find4uspringbootproject.dto.APIResponse;
-import com.kp.find4uspringbootproject.dto.MissingTipDTO;
-import com.kp.find4uspringbootproject.service.MissingTipService;
+import com.find4u.find4u2ndsemesterspringbootproject.dto.APIResponse;
+import com.find4u.find4u2ndsemesterspringbootproject.dto.MissingTipDTO;
+import com.find4u.find4u2ndsemesterspringbootproject.service.MissingTipService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

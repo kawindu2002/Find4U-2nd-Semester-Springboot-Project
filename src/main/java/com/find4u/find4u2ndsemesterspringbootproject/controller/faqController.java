@@ -1,8 +1,8 @@
 package com.find4u.find4u2ndsemesterspringbootproject.controller;
 
-import com.kp.find4uspringbootproject.dto.APIResponse;
-import com.kp.find4uspringbootproject.dto.FaqDTO;
-import com.kp.find4uspringbootproject.service.FaqService;
+import com.find4u.find4u2ndsemesterspringbootproject.dto.APIResponse;
+import com.find4u.find4u2ndsemesterspringbootproject.dto.FaqDTO;
+import com.find4u.find4u2ndsemesterspringbootproject.service.FaqService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

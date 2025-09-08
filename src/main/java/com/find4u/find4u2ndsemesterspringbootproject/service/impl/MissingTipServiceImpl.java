@@ -1,9 +1,9 @@
 package com.find4u.find4u2ndsemesterspringbootproject.service.impl;
 
-import com.kp.find4uspringbootproject.dto.MissingTipDTO;
-import com.kp.find4uspringbootproject.entity.MissingTip;
-import com.kp.find4uspringbootproject.repository.MissingTipRepository;
-import com.kp.find4uspringbootproject.service.MissingTipService;
+import com.find4u.find4u2ndsemesterspringbootproject.dto.MissingTipDTO;
+import com.find4u.find4u2ndsemesterspringbootproject.entity.MissingTip;
+import com.find4u.find4u2ndsemesterspringbootproject.repository.MissingTipRepository;
+import com.find4u.find4u2ndsemesterspringbootproject.service.MissingTipService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;

@@ -1,9 +1,9 @@
 package com.find4u.find4u2ndsemesterspringbootproject.service.impl;
 
-import com.kp.find4uspringbootproject.dto.FaqDTO;
-import com.kp.find4uspringbootproject.entity.Faq;
-import com.kp.find4uspringbootproject.repository.FaqRepository;
-import com.kp.find4uspringbootproject.service.FaqService;
+import com.find4u.find4u2ndsemesterspringbootproject.dto.FaqDTO;
+import com.find4u.find4u2ndsemesterspringbootproject.entity.Faq;
+import com.find4u.find4u2ndsemesterspringbootproject.repository.FaqRepository;
+import com.find4u.find4u2ndsemesterspringbootproject.service.FaqService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;

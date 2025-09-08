@@ -1,11 +1,11 @@
 package com.find4u.find4u2ndsemesterspringbootproject.service.impl;
 
-import com.kp.find4uspringbootproject.dto.UserDTO;
-import com.kp.find4uspringbootproject.entity.User;
-import com.kp.find4uspringbootproject.enums.UserStatus;
-import com.kp.find4uspringbootproject.exception.NotFoundException;
-import com.kp.find4uspringbootproject.repository.UserRepository;
-import com.kp.find4uspringbootproject.service.UserService;
+import com.find4u.find4u2ndsemesterspringbootproject.dto.UserDTO;
+import com.find4u.find4u2ndsemesterspringbootproject.entity.User;
+import com.find4u.find4u2ndsemesterspringbootproject.enums.UserStatus;
+import com.find4u.find4u2ndsemesterspringbootproject.exception.NotFoundException;
+import com.find4u.find4u2ndsemesterspringbootproject.repository.UserRepository;
+import com.find4u.find4u2ndsemesterspringbootproject.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
