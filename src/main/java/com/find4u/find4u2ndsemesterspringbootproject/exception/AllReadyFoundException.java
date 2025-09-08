@@ -9,5 +9,6 @@ public class AllReadyFoundException extends RuntimeException {
   public AllReadyFoundException(String message) {
     super(message); // Pass the custom message to the RuntimeException constructor
   }
+  
 }
 
