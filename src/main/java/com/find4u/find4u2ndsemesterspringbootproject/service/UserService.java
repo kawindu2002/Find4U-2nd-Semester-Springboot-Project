@@ -6,9 +6,7 @@ import com.find4u.find4u2ndsemesterspringbootproject.enums.UserStatus;
 import java.util.List;
 
 public interface UserService {
-
-     String generateCustomId();
-
+     
      void saveUser(UserDTO userDTO);
 
      void updateUser(UserDTO userDTO);

@@ -9,18 +9,31 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, String> {
      
-     //   SELECT COUNT(*) FROM missing_person WHERE id LIKE 'USR-2025-%'
-     long countByIdStartingWith(String prefix);
-     
+     long countByIdStartingWith(Long id);
      List<User> findUserByIdContainingIgnoreCase(String keyword);
      
      @Transactional
      @Modifying
      @Query(value = "UPDATE user SET status = ?2 WHERE id = ?1", nativeQuery = true)
      void updateUserStatusById(String id, UserStatus newStatus);
+     
+     Optional<User> findByEmail(String email);
+     Optional<User> findByVerificationToken(String verificationToken);
+     boolean existsByEmail(String email);
+     
 }
 
+
+//import java.util.Optional;
+//
+//@Repository
+//public interface UserRepository extends JpaRepository<User, Long> {
+//    Optional<User> findByEmail(String email);
+//    Optional<User> findByVerificationToken(String verificationToken);
+//    boolean existsByEmail(String email);
+//}

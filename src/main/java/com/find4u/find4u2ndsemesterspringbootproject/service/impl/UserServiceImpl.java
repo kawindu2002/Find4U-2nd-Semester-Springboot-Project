@@ -21,21 +21,7 @@ public class UserServiceImpl implements UserService {
      private final ModelMapper modelMapper;
      
      @Override
-     public String generateCustomId() {
-          String prefix = "USR";
-          String year = String.valueOf(LocalDate.now().getYear()); // USR-2025-%
-          String likePattern = prefix + "-" + year + "-";
-          // Count how many already exist with this year
-          long count = userRepo.countByIdStartingWith(likePattern);
-          long next = count + 1; // Get the next number in line
-          String sequence = String.format("%05d", next); // Pad the number to 5 digits: 00001, 00002, etc.
-          return String.format("%s-%s-%s", prefix, year, sequence); // Final ID: USR-2025-00001
-     }
-     
-     @Override
      public void saveUser(UserDTO userDTO) {
-        String customId = generateCustomId();
-        userDTO.setId(customId);
         User user = modelMapper.map(userDTO, User.class);
           userRepo.save(user);
      }

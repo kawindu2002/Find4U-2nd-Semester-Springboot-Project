@@ -7,8 +7,6 @@ import java.util.List;
 
 public interface MissingPersonService {
      
-     String generateCustomId();
-     
      void saveMissingPerson(MissingPersonDTO missingPersonDTO);
      
      void updateMissingPerson(MissingPersonDTO missingPersonDTO);

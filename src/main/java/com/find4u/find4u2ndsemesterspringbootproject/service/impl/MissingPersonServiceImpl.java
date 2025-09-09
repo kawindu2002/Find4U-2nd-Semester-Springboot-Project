@@ -22,21 +22,7 @@ public class MissingPersonServiceImpl implements MissingPersonService {
      private final ModelMapper modelMapper;
      
      @Override
-     public String generateCustomId() {
-          String prefix = "MIS";
-          String year = String.valueOf(LocalDate.now().getYear()); // MIS-2025-%
-          String likePattern = prefix + "-" + year + "-";
-          // Count how many already exist with this year
-          long count = missingPersonRepo.countByIdStartingWith(likePattern);
-          long next = count + 1; // Get the next number in line
-          String sequence = String.format("%05d", next); // Pad the number to 5 digits: 00001, 00002, etc.
-          return String.format("%s-%s-%s", prefix, year, sequence); // Final ID: MIS-2025-00001
-     }
-     
-     @Override
      public void saveMissingPerson(MissingPersonDTO missingPersonDTO) {
-        String customId = generateCustomId();
-        missingPersonDTO.setId(customId);
         MissingPerson person = modelMapper.map(missingPersonDTO, MissingPerson.class);
         missingPersonRepo.save(person);
      }

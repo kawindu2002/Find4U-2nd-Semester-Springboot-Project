@@ -23,7 +23,9 @@ import java.util.List;
 public class MissingPerson {
      
      @Id
-     private String id; // Ex: MIS-2025-00001
+     @GeneratedValue(strategy = GenerationType.IDENTITY)
+     private Long id;
+     
      private String fullName;
      private Integer age;
      
@@ -46,7 +48,7 @@ public class MissingPerson {
      private String photoUrl;
      
      @Enumerated(EnumType.STRING)
-     private PersonStatus status = PersonStatus.MISSING;
+     private PersonStatus status = PersonStatus.missing;
      
      @Column(name = "missing_date")
      private LocalDate missingDate;
@@ -71,11 +73,11 @@ public class MissingPerson {
      
      @Enumerated(EnumType.STRING)
      @Column(name = "accepted_term_policy")
-     private YesNo acceptedTermPolicy = YesNo.NO;
+     private YesNo acceptedTermPolicy = YesNo.no;
      
      @Enumerated(EnumType.STRING)
      @Column(name = "confirmed_details")
-     private YesNo confirmedDetails = YesNo.NO;
+     private YesNo confirmedDetails = YesNo.no;
      
      @Column(name = "created_at",updatable = false)
      private LocalDateTime createdAt;
