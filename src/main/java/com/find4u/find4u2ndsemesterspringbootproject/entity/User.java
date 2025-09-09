@@ -4,9 +4,11 @@ import com.find4u.find4u2ndsemesterspringbootproject.enums.Role;
 import com.find4u.find4u2ndsemesterspringbootproject.enums.UserStatus;
 import com.find4u.find4u2ndsemesterspringbootproject.enums.YesNo;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import java.util.UUID;
 
 import java.time.LocalDateTime;
 
@@ -18,34 +20,8 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "user")
 public class User {
-//     @Id
-//     private String id; // e.g., USR-2025-00001
-//
-//     private String name;
-//
-//     @Column(unique = true)
-//     private String email;
-//
-//     @Column(name = "phone_number")
-//     private String phoneNumber;
-//
-//     @Enumerated(EnumType.STRING)
-//     private Role role = Role.USER;;  // 'user', 'admin'
-//
-//     @Enumerated(EnumType.STRING)
-//     private UserStatus status = UserStatus.ACTIVE;   // 'active', 'inactive'
-//
-//     @Column(name = "last_login")
-//     private LocalDateTime lastLogin;
-//
-//     @CreationTimestamp
-//     @Column(name = "created_at",updatable = false)
-//     private LocalDateTime createdAt;
-//
-//     @UpdateTimestamp
-//     @Column(name = "updated_at")
-//     private LocalDateTime updatedAt;
-     
+
+//   ===================================================================================================================
      
      @Id
      @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -70,33 +46,54 @@ public class User {
      @Size(max = 15)
      @Column(name = "phone_number")
      private String phoneNumber;
-
-     @NotBlank(message = "Password is required")
-     @Size(min = 8, message = "Password must be at least 8 characters")
-     private String password;
-
-     @Column(name = "verification_token")
-     private String verificationToken;
+     
+//   ===================================================================================================================
+     
+     @Enumerated(EnumType.STRING)
+     private Role role = Role.user;;  // 'user', 'admin'
+     
+     @Enumerated(EnumType.STRING)
+     private UserStatus status = UserStatus.inactive;   // 'active', 'inactive'
      
      @Enumerated(EnumType.STRING)
      @Column(name = "is_verified")
-     private YesNo isVerified = YesNo.NO; // 'Yes', 'No'
+     private YesNo isVerified = YesNo.no; // 'Yes', 'No'
      
-     @Enumerated(EnumType.STRING)
-     private UserStatus status = UserStatus.ACTIVE;   // 'active', 'inactive'
+//   ===================================================================================================================
+
+     @NotBlank(message = "Password is required")
+     private String password;
      
-     @CreationTimestamp
+     @Column(name = "verification_token")
+     private String verificationToken;
+     
+//   ===================================================================================================================
+     
      @Column(name = "created_at",updatable = false)
      private LocalDateTime createdAt;
      
-     @UpdateTimestamp
      @Column(name = "updated_at")
      private LocalDateTime updatedAt;
      
-}
-
 
 // =====================================================================================================================
+
+     @PrePersist
+     protected void onCreate() {
+          this.createdAt = LocalDateTime.now();
+          this.updatedAt = LocalDateTime.now();
+          this.verificationToken = UUID.randomUUID().toString();
+     }
+
+     @PreUpdate
+     protected void onUpdate() {
+          this.updatedAt = LocalDateTime.now();
+     }
+     
+}
+
+// =====================================================================================================================
+
 
 //package com.find4u.model;
 //
@@ -205,3 +202,34 @@ public class User {
 //     public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
 //}
 //
+
+// =====================================================================================================================
+
+
+//     @Id
+//     private String id; // e.g., USR-2025-00001
+//
+//     private String name;
+//
+//     @Column(unique = true)
+//     private String email;
+//
+//     @Column(name = "phone_number")
+//     private String phoneNumber;
+//
+//     @Enumerated(EnumType.STRING)
+//     private Role role = Role.USER;;  // 'user', 'admin'
+//
+//     @Enumerated(EnumType.STRING)
+//     private UserStatus status = UserStatus.ACTIVE;   // 'active', 'inactive'
+//
+//     @Column(name = "last_login")
+//     private LocalDateTime lastLogin;
+//
+//     @CreationTimestamp
+//     @Column(name = "created_at",updatable = false)
+//     private LocalDateTime createdAt;
+//
+//     @UpdateTimestamp
+//     @Column(name = "updated_at")
+//     private LocalDateTime updatedAt;

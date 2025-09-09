@@ -1,6 +1,6 @@
 package com.find4u.find4u2ndsemesterspringbootproject.enums;
 
 public enum YesNo {
-     YES, NO
+     yes,no
 }
 
