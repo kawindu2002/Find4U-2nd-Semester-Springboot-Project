@@ -27,48 +27,44 @@ public class User {
      @GeneratedValue(strategy = GenerationType.IDENTITY)
      private Long id;
 
-     @NotBlank(message = "First name is required")
+     @NotBlank
      @Column(name = "first_name")
      private String firstName;
 
-     @NotBlank(message = "Last name is required")
+     @NotBlank
      @Column(name = "last_name")
      private String lastName;
 
-     @NotBlank(message = "Email is required")
-     @Email(message = "Email should be valid")
+     @NotBlank
+     @Email
      @Column(unique = true, nullable = false)
      private String email;
 
-     @NotBlank(message = "Phone number is required")
+     @NotBlank
      @Column(name = "phone_number")
      private String phoneNumber;
      
 //   ===================================================================================================================
     
      @Column(nullable = false)
-     @Enumerated(EnumType.STRING)
-     private Role role = Role.user;;  // 'user', 'admin'
+     private String role = "user";;  // 'user', 'admin'
      
      @Column(nullable = false)
-     @Enumerated(EnumType.STRING)
-     private UserStatus status = UserStatus.inactive; // 'active', 'inactive'
+     private String status = "inactive";
      
-     @Enumerated(EnumType.STRING)
      @Column(name = "is_verified", nullable = false)
-     private YesNo isVerified = YesNo.no; // 'Yes', 'No'
+     private Boolean isVerified = false;
      
      @Column(nullable = false)
-     @Enumerated(EnumType.STRING)
-     private YesNo isAgreedTermsPolicy = YesNo.no;
+     private Boolean isAgreedTermsPolicy = false;
 
 //   ===================================================================================================================
 
      @NotBlank(message = "Password is required")
      private String password;
      
-     @Column(name = "verification_token")
-     private String verificationToken;
+     @Column(name = "verification_otp")
+     private String verificationOtp;
      
 //   ===================================================================================================================
      
@@ -78,14 +74,12 @@ public class User {
      @Column(name = "updated_at")
      private LocalDateTime updatedAt;
      
-
 // =====================================================================================================================
 
      @PrePersist
      protected void onCreate() {
           this.createdAt = LocalDateTime.now();
           this.updatedAt = LocalDateTime.now();
-          this.verificationToken = UUID.randomUUID().toString();
      }
 
      @PreUpdate
@@ -94,20 +88,6 @@ public class User {
      }
      
 }
-
-
-@Column(nullable = false, unique = true)
-@NotBlank // Even the DB schema and entity agree it shouldn't be blank
-@Email // The core domain says a User must have a valid email format
-private String email;
-
-@Column(nullable = false)
-@NotBlank
-private String passwordHash; // Note: stored as a hash, not plain text
-
-@Column(nullable = false)
-@Min(18) // The business insists a User in the system MUST be 18+
-private Integer age;
 
 // =====================================================================================================================
 

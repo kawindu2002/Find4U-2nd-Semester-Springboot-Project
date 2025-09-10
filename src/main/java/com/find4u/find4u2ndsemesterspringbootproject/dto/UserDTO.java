@@ -3,10 +3,6 @@ package com.find4u.find4u2ndsemesterspringbootproject.dto;
 import com.find4u.find4u2ndsemesterspringbootproject.enums.Role;
 import com.find4u.find4u2ndsemesterspringbootproject.enums.UserStatus;
 import com.find4u.find4u2ndsemesterspringbootproject.enums.YesNo;
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
@@ -39,16 +35,16 @@ public class UserDTO {
 
 //   ===================================================================================================================
      
-     private Role role;  // 'user', 'admin'
-     private UserStatus status; // 'active', 'inactive'
-     private YesNo isVerified; // 'Yes', 'No'
-     private YesNo isAgreedTermsPolicy;
+     private String role;  // 'user', 'admin'
+     private String status; // 'active', 'inactive'
+     private Boolean isVerified; // 'Yes', 'No'
+     private Boolean isAgreedTermsPolicy;
 
 //   ===================================================================================================================
      
      @NotBlank(message = "Password is required")
      private String password;
-     private String verificationToken;
+     private String verificationOTP;
 
 //   ===================================================================================================================
      

@@ -3,6 +3,13 @@ package com.find4u.find4u2ndsemesterspringbootproject.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.*;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
 
 public class RegistrationRequestDTO {
      @NotBlank(message = "First name is required")

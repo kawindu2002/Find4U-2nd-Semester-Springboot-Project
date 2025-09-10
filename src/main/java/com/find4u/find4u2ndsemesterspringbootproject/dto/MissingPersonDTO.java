@@ -21,14 +21,14 @@ public class MissingPersonDTO {
      private Long id;
      private String fullName;
      private Integer age;
-     private Gender gender;
+     private String gender;
      private String height;
      private String weight;
      private String hairColor;
      private String eyeColor;
      private String distinguishingFeatures;
      private String photoUrl;
-     private PersonStatus status;
+     private String status;
      
      @JsonFormat(pattern = "yyyy-MM-dd")
      private LocalDate missingDate;
@@ -47,8 +47,8 @@ public class MissingPersonDTO {
      private String relationToMissingPerson; // Ex: Brother, Sister
      private String reward;
      
-     private YesNo acceptedTermPolicy;
-     private YesNo confirmedDetails;
+     private Boolean isAcceptedTermPolicy;
+     private Boolean isConfirmedDetails;
      
      private LocalDateTime createdAt;
      private LocalDateTime updatedAt;

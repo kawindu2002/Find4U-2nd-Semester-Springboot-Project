@@ -5,6 +5,7 @@ import com.find4u.find4u2ndsemesterspringbootproject.entity.User;
 import com.find4u.find4u2ndsemesterspringbootproject.enums.UserStatus;
 import com.find4u.find4u2ndsemesterspringbootproject.exception.NotFoundException;
 import com.find4u.find4u2ndsemesterspringbootproject.repository.UserRepository;
+import com.find4u.find4u2ndsemesterspringbootproject.service.EmailService;
 import com.find4u.find4u2ndsemesterspringbootproject.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -12,12 +13,16 @@ import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
      private final UserRepository userRepo;
      private final ModelMapper modelMapper;
+//     private PasswordEncoder passwordEncoder;
+     private EmailService emailService;
+     
      
      @Override
      public void saveUser(UserDTO userDTO) {
@@ -59,5 +64,50 @@ public class UserServiceImpl implements UserService {
           userRepo.updateUserStatusById(userId, newStatus);
      }
      
+     public User registerUser(User user) {
+        // Check if email already exists
+        if (userRepo.existsByEmail(user.getEmail())) {
+            throw new RuntimeException("Email already registered");
+        }
+     
+        // Encrypt password
+//        user.setPassword(passwordEncoder.encode(user.getPassword()));
+     
+        // Save user
+        User savedUser = userRepo.save(user);
+     
+        // Send verification email
+//        emailService.sendVerificationEmail(savedUser.getEmail(), savedUser.getVerificationToken());
+     
+        return savedUser;
+        
+     }
+
+//     public boolean verifyUser(String token) {
+//        Optional<User> userOptional = userRepo.findByVerificationToken(token);
+//
+//        if (userOptional.isPresent()) {
+//            User user = userOptional.get();
+//            user.setVerified(true);
+//            user.setVerificationToken(null); // Clear the token after verification
+//            userRepository.save(user);
+//            return true;
+//        }
+//        return false;
+//     }
+
+     public Optional<User> findByEmail(String email) {
+          return userRepo.findByEmail(email);
+     }
+     
+//     public String generateVerificationOtp() {
+//          SecureRandom random = new SecureRandom();
+//          int otpValue = random.nextInt(1000000);
+//          return String.format("%06d", otpValue);
+//     }
+     
 }
+
+
+// ====================================================================================================================
 

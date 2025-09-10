@@ -16,6 +16,8 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
 
+//  ==================================================================================================================
+    
     //  Save
     @PostMapping("save")
     public ResponseEntity<String> save(@RequestBody UserDTO userDTO) {
@@ -43,6 +45,8 @@ public class UserController {
         return ResponseEntity.ok(userService.getAllUsers());
     }
     
+//  ==================================================================================================================
+    
     //  Change status (like ACTIVE → INACTIVE)
     @PatchMapping("{id}/status")
     public ResponseEntity<String> updateStatus(@PathVariable Long id, @RequestParam UserStatus status) {
@@ -50,5 +54,8 @@ public class UserController {
         return ResponseEntity.ok("Status updated to: " + status);
     }
     
+//  ==================================================================================================================
+
 }
+
 

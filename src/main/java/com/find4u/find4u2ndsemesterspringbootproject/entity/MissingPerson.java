@@ -29,8 +29,7 @@ public class MissingPerson {
      private String fullName;
      private Integer age;
      
-     @Enumerated(EnumType.STRING)
-     private Gender gender;
+     private String gender;
      
      private String height;
      private String weight;
@@ -47,8 +46,7 @@ public class MissingPerson {
      @Column(name = "photo_url")
      private String photoUrl;
      
-     @Enumerated(EnumType.STRING)
-     private PersonStatus status = PersonStatus.missing;
+     private String status = "missing";
      
      @Column(name = "missing_date")
      private LocalDate missingDate;
@@ -70,13 +68,11 @@ public class MissingPerson {
      private String relationToMissingPerson; // Ex: Brother, Sister
      private String reward;
      
-     @Enumerated(EnumType.STRING)
      @Column(name = "accepted_term_policy")
-     private YesNo acceptedTermPolicy = YesNo.no;
+     private Boolean isAcceptedTermPolicy = false;
      
-     @Enumerated(EnumType.STRING)
      @Column(name = "confirmed_details")
-     private YesNo confirmedDetails = YesNo.no;
+     private Boolean isConfirmedDetails = false;
      
      @Column(name = "created_at",updatable = false)
      private LocalDateTime createdAt;
