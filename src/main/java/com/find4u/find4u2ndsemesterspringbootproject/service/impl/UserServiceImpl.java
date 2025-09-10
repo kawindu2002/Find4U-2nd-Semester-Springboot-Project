@@ -11,7 +11,6 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -36,15 +35,14 @@ public class UserServiceImpl implements UserService {
      }
      
      @Override
-     public boolean isExistUser(String userId) {
+     public boolean isExistUser(Long userId) {
           return userRepo.existsById(userId);
      }
-
+     
      @Override
-     public void deleteUser(String userId) {
+     public void deleteUser(Long userId) {
           userRepo.findById(userId)
                .orElseThrow(() -> new NotFoundException("User not found with ID: " + userId));
-          
           userRepo.deleteById(userId);
      }
      
@@ -55,13 +53,7 @@ public class UserServiceImpl implements UserService {
      }
 
      @Override
-     public List<UserDTO> getAllByKeyword(String keyword) {
-          List<User> list = userRepo.findUserByIdContainingIgnoreCase(keyword);
-          return modelMapper.map(list, new TypeToken<List<UserDTO>>(){}.getType());
-     }
-
-     @Override
-     public void updateUserStatusById(String userId, UserStatus newStatus) {
+     public void updateUserStatusById(Long userId, UserStatus newStatus) {
           userRepo.findById(userId)
                .orElseThrow(() -> new NotFoundException("User not found with ID: " + userId));
           userRepo.updateUserStatusById(userId, newStatus);

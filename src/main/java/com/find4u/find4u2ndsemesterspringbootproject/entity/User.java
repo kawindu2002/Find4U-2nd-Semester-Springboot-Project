@@ -28,37 +28,40 @@ public class User {
      private Long id;
 
      @NotBlank(message = "First name is required")
-     @Size(max = 50)
      @Column(name = "first_name")
      private String firstName;
 
      @NotBlank(message = "Last name is required")
-     @Size(max = 50)
      @Column(name = "last_name")
      private String lastName;
 
      @NotBlank(message = "Email is required")
      @Email(message = "Email should be valid")
-     @Column(unique = true)
+     @Column(unique = true, nullable = false)
      private String email;
 
      @NotBlank(message = "Phone number is required")
-     @Size(max = 15)
      @Column(name = "phone_number")
      private String phoneNumber;
      
 //   ===================================================================================================================
-     
+    
+     @Column(nullable = false)
      @Enumerated(EnumType.STRING)
      private Role role = Role.user;;  // 'user', 'admin'
      
+     @Column(nullable = false)
      @Enumerated(EnumType.STRING)
-     private UserStatus status = UserStatus.inactive;   // 'active', 'inactive'
+     private UserStatus status = UserStatus.inactive; // 'active', 'inactive'
      
      @Enumerated(EnumType.STRING)
-     @Column(name = "is_verified")
+     @Column(name = "is_verified", nullable = false)
      private YesNo isVerified = YesNo.no; // 'Yes', 'No'
      
+     @Column(nullable = false)
+     @Enumerated(EnumType.STRING)
+     private YesNo isAgreedTermsPolicy = YesNo.no;
+
 //   ===================================================================================================================
 
      @NotBlank(message = "Password is required")
@@ -91,6 +94,20 @@ public class User {
      }
      
 }
+
+
+@Column(nullable = false, unique = true)
+@NotBlank // Even the DB schema and entity agree it shouldn't be blank
+@Email // The core domain says a User must have a valid email format
+private String email;
+
+@Column(nullable = false)
+@NotBlank
+private String passwordHash; // Note: stored as a hash, not plain text
+
+@Column(nullable = false)
+@Min(18) // The business insists a User in the system MUST be 18+
+private Integer age;
 
 // =====================================================================================================================
 

@@ -70,7 +70,6 @@ public class MissingPerson {
      private String relationToMissingPerson; // Ex: Brother, Sister
      private String reward;
      
-     
      @Enumerated(EnumType.STRING)
      @Column(name = "accepted_term_policy")
      private YesNo acceptedTermPolicy = YesNo.no;

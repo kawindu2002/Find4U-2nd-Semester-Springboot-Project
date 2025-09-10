@@ -12,15 +12,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, String> {
-     
-     long countByIdStartingWith(Long id);
-     List<User> findUserByIdContainingIgnoreCase(String keyword);
+public interface UserRepository extends JpaRepository<User, Long> {
      
      @Transactional
      @Modifying
      @Query(value = "UPDATE user SET status = ?2 WHERE id = ?1", nativeQuery = true)
-     void updateUserStatusById(String id, UserStatus newStatus);
+     void updateUserStatusById(Long id, UserStatus newStatus);
      
      Optional<User> findByEmail(String email);
      Optional<User> findByVerificationToken(String verificationToken);
@@ -28,12 +25,3 @@ public interface UserRepository extends JpaRepository<User, String> {
      
 }
 
-
-//import java.util.Optional;
-//
-//@Repository
-//public interface UserRepository extends JpaRepository<User, Long> {
-//    Optional<User> findByEmail(String email);
-//    Optional<User> findByVerificationToken(String verificationToken);
-//    boolean existsByEmail(String email);
-//}

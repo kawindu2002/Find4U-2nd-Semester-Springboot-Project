@@ -20,21 +20,21 @@ public class UserController {
     @PostMapping("save")
     public ResponseEntity<String> save(@RequestBody UserDTO userDTO) {
         userService.saveUser(userDTO);
-        return ResponseEntity.ok("✅ User saved successfully!");
+        return ResponseEntity.ok("User saved successfully!");
     }
     
     //  update
     @PutMapping("update")
     public ResponseEntity<String> update(@RequestBody UserDTO userDTO) {
-        userService.updateUser(userDTO); // 🔥 Will throw if not found
-        return ResponseEntity.ok("🔁 User updated successfully.");
+        userService.updateUser(userDTO);
+        return ResponseEntity.ok("User updated successfully.");
     }
     
     //  Delete
     @DeleteMapping("delete/{id}")
-    public ResponseEntity<String> delete(@PathVariable String id) {
+    public ResponseEntity<String> delete(@PathVariable Long id) {
         userService.deleteUser(id);
-        return ResponseEntity.ok("🗑️ User deleted: " + id);
+        return ResponseEntity.ok("User deleted: " + id);
     }
     
     //  Get all
@@ -43,17 +43,11 @@ public class UserController {
         return ResponseEntity.ok(userService.getAllUsers());
     }
     
-    // Search by keyword
-    @GetMapping("search/{keyword}")
-    public ResponseEntity<List<UserDTO>> search(@PathVariable String keyword) {
-        return ResponseEntity.ok(userService.getAllByKeyword(keyword));
-    }
-    
     //  Change status (like ACTIVE → INACTIVE)
     @PatchMapping("{id}/status")
-    public ResponseEntity<String> updateStatus(@PathVariable String id, @RequestParam UserStatus status) {
+    public ResponseEntity<String> updateStatus(@PathVariable Long id, @RequestParam UserStatus status) {
         userService.updateUserStatusById(id, status);
-        return ResponseEntity.ok("✅ Status updated to: " + status);
+        return ResponseEntity.ok("Status updated to: " + status);
     }
     
 }

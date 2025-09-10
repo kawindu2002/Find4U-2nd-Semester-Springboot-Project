@@ -18,7 +18,7 @@ public class MissingTipDTO {
      private String tip;
      private String source;
      
-     private String missingPersonId;
+     private Long missingPersonId;
      
 }
 

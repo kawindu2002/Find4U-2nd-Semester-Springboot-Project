@@ -29,13 +29,13 @@ public class MissingPersonController {
     // Update
     @PutMapping("update")
     public ResponseEntity<APIResponse> update(@RequestBody MissingPersonDTO missingPersonDTO) {
-        missingPersonService.updateMissingPerson(missingPersonDTO); // Will throw if not found
+        missingPersonService.updateMissingPerson(missingPersonDTO);
         return new ResponseEntity(new APIResponse(200, "Missing person updated successfully.", null), HttpStatus.OK);
     }
     
     // Delete
     @DeleteMapping("delete/{id}")
-    public ResponseEntity<APIResponse> delete(@PathVariable String id) {
+    public ResponseEntity<APIResponse> delete(@PathVariable Long id) {
         missingPersonService.deleteMissingPerson(id);
         return new ResponseEntity(new APIResponse(200, "Missing person deleted: " + id, null), HttpStatus.OK);
     }
@@ -46,17 +46,10 @@ public class MissingPersonController {
         List<MissingPersonDTO> missingList = missingPersonService.getAllMissingPeople();
         return new ResponseEntity(new APIResponse(200, "Success", missingList), HttpStatus.OK);
     }
-
-    // Search by keyword
-    @GetMapping("search/{keyword}")
-    public ResponseEntity<APIResponse> search(@PathVariable String keyword) {
-        missingPersonService.getAllByKeyword(keyword);
-        return new ResponseEntity(new APIResponse(200, "Missing Person Found Successfully", null), HttpStatus.OK);
-    }
-
+    
     // Change status (like MISSING → FOUND)
     @PatchMapping("{id}/status")
-    public ResponseEntity<APIResponse> updateStatus(@PathVariable String id, @RequestParam PersonStatus status) {
+    public ResponseEntity<APIResponse> updateStatus(@PathVariable Long id, @RequestParam PersonStatus status) {
         missingPersonService.updateMissingPersonStatusById(id, status);
         return new ResponseEntity(new APIResponse(200, "Status updated to: " + status, null), HttpStatus.OK);
     

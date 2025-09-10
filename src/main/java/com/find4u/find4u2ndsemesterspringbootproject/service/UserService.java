@@ -11,15 +11,13 @@ public interface UserService {
 
      void updateUser(UserDTO userDTO);
 
-     boolean isExistUser(String userId);
+     boolean isExistUser(Long userId);
 
-     void deleteUser(String userId);
+     void deleteUser(Long userId);
 
      List<UserDTO> getAllUsers();
-
-     List<UserDTO> getAllByKeyword(String keyword);
-
-     void updateUserStatusById(String id, UserStatus newStatus);
+     
+     void updateUserStatusById(Long id, UserStatus newStatus);
 
 }
 

@@ -11,15 +11,13 @@ public interface MissingPersonService {
      
      void updateMissingPerson(MissingPersonDTO missingPersonDTO);
      
-     boolean isExistMissingPerson(String missingPersonId);
+     boolean isExistMissingPerson(Long missingPersonId);
      
-     void deleteMissingPerson(String missingPersonId);
+     void deleteMissingPerson(Long missingPersonId);
      
      List<MissingPersonDTO> getAllMissingPeople();
      
-     List<MissingPersonDTO> getAllByKeyword(String keyword);
-     
-     void updateMissingPersonStatusById(String id, PersonStatus newStatus);
+     void updateMissingPersonStatusById(Long id, PersonStatus newStatus);
      
 }
 

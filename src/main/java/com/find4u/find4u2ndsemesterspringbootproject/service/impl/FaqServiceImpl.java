@@ -21,7 +21,7 @@ public class FaqServiceImpl implements FaqService {
      @Override
      public List<FaqDTO> getAllFaqs() {
           List<Faq> allfaqs = faqRepo.findAll();
-          return modelMapper.map(allfaqs, new TypeToken<List<FaqDTO>>() {}.getType());
+          return modelMapper.map(allfaqs, new TypeToken<List<FaqDTO>>(){}.getType());
      }
 
 }

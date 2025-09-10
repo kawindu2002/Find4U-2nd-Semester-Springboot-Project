@@ -18,7 +18,7 @@ import java.time.LocalTime;
 @ToString
 public class MissingPersonDTO {
      
-     private String id;   // MIS-2025-00001
+     private Long id;
      private String fullName;
      private Integer age;
      private Gender gender;
@@ -43,7 +43,7 @@ public class MissingPersonDTO {
      private String clothing;
      private String circumstances;
      
-     private String reporterId;    // FK only reporter's ID = User id --> username, email and contact number
+     private Long reporterId;    // FK only reporter's ID = User id --> username, email and contact number
      private String relationToMissingPerson; // Ex: Brother, Sister
      private String reward;
      

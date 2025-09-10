@@ -11,7 +11,6 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -37,12 +36,12 @@ public class MissingPersonServiceImpl implements MissingPersonService {
      }
      
      @Override
-     public boolean isExistMissingPerson(String missingPersonId) {
+     public boolean isExistMissingPerson(Long missingPersonId) {
           return missingPersonRepo.existsById(missingPersonId);
      }
      
      @Override
-     public void deleteMissingPerson(String missingPersonId) {
+     public void deleteMissingPerson(Long missingPersonId) {
           missingPersonRepo.findById(missingPersonId)
                .orElseThrow(() -> new NotFoundException("Missing person not found with ID: " + missingPersonId));
 
@@ -56,13 +55,7 @@ public class MissingPersonServiceImpl implements MissingPersonService {
      }
      
      @Override
-     public List<MissingPersonDTO> getAllByKeyword(String keyword) {
-          List<MissingPerson> list = missingPersonRepo.findMissingPersonByIdContainingIgnoreCase(keyword);
-          return modelMapper.map(list, new TypeToken<List<MissingPersonDTO>>(){}.getType());
-     }
-     
-     @Override
-     public void updateMissingPersonStatusById(String missingPersonId, PersonStatus newStatus) {
+     public void updateMissingPersonStatusById(Long missingPersonId, PersonStatus newStatus) {
           missingPersonRepo.findById(missingPersonId)
                .orElseThrow(() -> new NotFoundException("Missing person not found with ID: " + missingPersonId));
           missingPersonRepo.updateMissingPersonStatusById(missingPersonId, newStatus);
