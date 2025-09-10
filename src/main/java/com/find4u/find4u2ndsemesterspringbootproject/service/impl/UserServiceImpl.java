@@ -2,7 +2,6 @@ package com.find4u.find4u2ndsemesterspringbootproject.service.impl;
 
 import com.find4u.find4u2ndsemesterspringbootproject.dto.UserDTO;
 import com.find4u.find4u2ndsemesterspringbootproject.entity.User;
-import com.find4u.find4u2ndsemesterspringbootproject.enums.UserStatus;
 import com.find4u.find4u2ndsemesterspringbootproject.exception.NotFoundException;
 import com.find4u.find4u2ndsemesterspringbootproject.repository.UserRepository;
 import com.find4u.find4u2ndsemesterspringbootproject.service.EmailService;
@@ -12,6 +11,7 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,14 +20,14 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
      private final UserRepository userRepo;
      private final ModelMapper modelMapper;
-//     private PasswordEncoder passwordEncoder;
+//   private PasswordEncoder passwordEncoder;
      private EmailService emailService;
      
      
      @Override
      public void saveUser(UserDTO userDTO) {
         User user = modelMapper.map(userDTO, User.class);
-          userRepo.save(user);
+        userRepo.save(user);
      }
      
      @Override
@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
      }
 
      @Override
-     public void updateUserStatusById(Long userId, UserStatus newStatus) {
+     public void updateUserStatusById(Long userId, String newStatus) {
           userRepo.findById(userId)
                .orElseThrow(() -> new NotFoundException("User not found with ID: " + userId));
           userRepo.updateUserStatusById(userId, newStatus);
@@ -71,15 +71,15 @@ public class UserServiceImpl implements UserService {
         }
      
         // Encrypt password
-//        user.setPassword(passwordEncoder.encode(user.getPassword()));
+//      user.setPassword(passwordEncoder.encode(user.getPassword()));
      
         // Save user
         User savedUser = userRepo.save(user);
      
         // Send verification email
-//        emailService.sendVerificationEmail(savedUser.getEmail(), savedUser.getVerificationToken());
+//        emailService.sendVerificationEmail(user.getEmail(), user.getVerificationToken());
      
-        return savedUser;
+        return user;
         
      }
 
@@ -90,7 +90,7 @@ public class UserServiceImpl implements UserService {
 //            User user = userOptional.get();
 //            user.setVerified(true);
 //            user.setVerificationToken(null); // Clear the token after verification
-//            userRepository.save(user);
+//            userRepo.save(user);
 //            return true;
 //        }
 //        return false;
@@ -100,11 +100,11 @@ public class UserServiceImpl implements UserService {
           return userRepo.findByEmail(email);
      }
      
-//     public String generateVerificationOtp() {
-//          SecureRandom random = new SecureRandom();
-//          int otpValue = random.nextInt(1000000);
-//          return String.format("%06d", otpValue);
-//     }
+     public String generateVerificationOtp() {
+          SecureRandom random = new SecureRandom();
+          int otpValue = random.nextInt(1000000);
+          return String.format("%06d", otpValue);
+     }
      
 }
 

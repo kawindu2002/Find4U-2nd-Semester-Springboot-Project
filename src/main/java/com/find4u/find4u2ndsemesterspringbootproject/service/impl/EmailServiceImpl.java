@@ -1,7 +1,6 @@
 package com.find4u.find4u2ndsemesterspringbootproject.service.impl;
 
 import com.find4u.find4u2ndsemesterspringbootproject.service.EmailService;
-import com.find4u.find4u2ndsemesterspringbootproject.service.FaqService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
@@ -15,7 +14,6 @@ public class EmailServiceImpl implements EmailService {
      @Autowired
      private JavaMailSender mailSender;
      
-
      @Override
      public void sendVerificationOtp(String to, String otp) {
           
@@ -29,6 +27,8 @@ public class EmailServiceImpl implements EmailService {
      
      @Override
      public void sendVerificationEmail(String to, String token) {
+//          String verificationUrl = "http://localhost:8080/api/auth/verify?token=" + token;
+          
           String verificationUrl = "http://localhost:8080/api/auth/verify?token=" + token;
           
           SimpleMailMessage message = new SimpleMailMessage();

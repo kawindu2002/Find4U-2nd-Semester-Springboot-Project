@@ -1,14 +1,15 @@
 package com.find4u.find4u2ndsemesterspringbootproject.service;
 
 import com.find4u.find4u2ndsemesterspringbootproject.dto.UserDTO;
-import com.find4u.find4u2ndsemesterspringbootproject.enums.UserStatus;
+import com.find4u.find4u2ndsemesterspringbootproject.entity.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserService {
      
      void saveUser(UserDTO userDTO);
-
+     
      void updateUser(UserDTO userDTO);
 
      boolean isExistUser(Long userId);
@@ -17,8 +18,17 @@ public interface UserService {
 
      List<UserDTO> getAllUsers();
      
-     void updateUserStatusById(Long id, UserStatus newStatus);
-
+     void updateUserStatusById(Long userId, String newStatus);
+     
+     User registerUser(User user);
+     
+     Optional<User> findByEmail(String email);
+     
+     String generateVerificationOtp();
+     
 }
+
+
+
 
 

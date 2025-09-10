@@ -1,7 +1,6 @@
 package com.find4u.find4u2ndsemesterspringbootproject.controller;
 
 import com.find4u.find4u2ndsemesterspringbootproject.dto.UserDTO;
-import com.find4u.find4u2ndsemesterspringbootproject.enums.UserStatus;
 import com.find4u.find4u2ndsemesterspringbootproject.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -49,7 +48,7 @@ public class UserController {
     
     //  Change status (like ACTIVE → INACTIVE)
     @PatchMapping("{id}/status")
-    public ResponseEntity<String> updateStatus(@PathVariable Long id, @RequestParam UserStatus status) {
+    public ResponseEntity<String> updateStatus(@PathVariable Long id, @RequestParam String status) {
         userService.updateUserStatusById(id, status);
         return ResponseEntity.ok("Status updated to: " + status);
     }

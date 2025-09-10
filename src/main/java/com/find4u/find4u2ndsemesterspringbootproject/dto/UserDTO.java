@@ -1,8 +1,5 @@
 package com.find4u.find4u2ndsemesterspringbootproject.dto;
 
-import com.find4u.find4u2ndsemesterspringbootproject.enums.Role;
-import com.find4u.find4u2ndsemesterspringbootproject.enums.UserStatus;
-import com.find4u.find4u2ndsemesterspringbootproject.enums.YesNo;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;

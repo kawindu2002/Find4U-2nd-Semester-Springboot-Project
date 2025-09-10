@@ -2,7 +2,6 @@ package com.find4u.find4u2ndsemesterspringbootproject.service.impl;
 
 import com.find4u.find4u2ndsemesterspringbootproject.dto.MissingPersonDTO;
 import com.find4u.find4u2ndsemesterspringbootproject.entity.MissingPerson;
-import com.find4u.find4u2ndsemesterspringbootproject.enums.PersonStatus;
 import com.find4u.find4u2ndsemesterspringbootproject.exception.NotFoundException;
 import com.find4u.find4u2ndsemesterspringbootproject.repository.MissingPersonRepository;
 import com.find4u.find4u2ndsemesterspringbootproject.service.MissingPersonService;
@@ -55,7 +54,7 @@ public class MissingPersonServiceImpl implements MissingPersonService {
      }
      
      @Override
-     public void updateMissingPersonStatusById(Long missingPersonId, PersonStatus newStatus) {
+     public void updateMissingPersonStatusById(Long missingPersonId, String newStatus) {
           missingPersonRepo.findById(missingPersonId)
                .orElseThrow(() -> new NotFoundException("Missing person not found with ID: " + missingPersonId));
           missingPersonRepo.updateMissingPersonStatusById(missingPersonId, newStatus);

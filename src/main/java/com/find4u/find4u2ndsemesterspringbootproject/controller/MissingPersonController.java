@@ -2,7 +2,6 @@ package com.find4u.find4u2ndsemesterspringbootproject.controller;
 
 import com.find4u.find4u2ndsemesterspringbootproject.dto.APIResponse;
 import com.find4u.find4u2ndsemesterspringbootproject.dto.MissingPersonDTO;
-import com.find4u.find4u2ndsemesterspringbootproject.enums.PersonStatus;
 import com.find4u.find4u2ndsemesterspringbootproject.service.MissingPersonService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -49,7 +48,7 @@ public class MissingPersonController {
     
     // Change status (like MISSING → FOUND)
     @PatchMapping("{id}/status")
-    public ResponseEntity<APIResponse> updateStatus(@PathVariable Long id, @RequestParam PersonStatus status) {
+    public ResponseEntity<APIResponse> updateStatus(@PathVariable Long id, @RequestParam String status) {
         missingPersonService.updateMissingPersonStatusById(id, status);
         return new ResponseEntity(new APIResponse(200, "Status updated to: " + status, null), HttpStatus.OK);
     

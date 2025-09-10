@@ -1,14 +1,7 @@
 package com.find4u.find4u2ndsemesterspringbootproject.controller;
 
-import com.find4u.find4u2ndsemesterspringbootproject.dto.APIResponse;
-import com.find4u.find4u2ndsemesterspringbootproject.dto.RegistrationRequestDTO;
-import com.find4u.find4u2ndsemesterspringbootproject.dto.UserDTO;
-import com.find4u.find4u2ndsemesterspringbootproject.entity.User;
-import com.find4u.find4u2ndsemesterspringbootproject.enums.UserStatus;
 import com.find4u.find4u2ndsemesterspringbootproject.service.UserService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
