@@ -23,6 +23,7 @@ public class UserServiceImpl implements UserService {
 //   private PasswordEncoder passwordEncoder;
      private EmailService emailService;
      
+//   ===================================================================================================================
      
      @Override
      public void saveUser(UserDTO userDTO) {
@@ -30,19 +31,24 @@ public class UserServiceImpl implements UserService {
         userRepo.save(user);
      }
      
+//   ===================================================================================================================
+     
      @Override
      public void updateUser(UserDTO userDTO) {
           userRepo.findById(userDTO.getId())
                .orElseThrow(() -> new NotFoundException("User not found with ID: " + userDTO.getId()));
           
-          User user = modelMapper.map(userDTO, User.class);
-          userRepo.save(user);
+          saveUser(userDTO);
      }
+     
+//   ===================================================================================================================
      
      @Override
      public boolean isExistUser(Long userId) {
           return userRepo.existsById(userId);
      }
+
+//   ===================================================================================================================
      
      @Override
      public void deleteUser(Long userId) {
@@ -50,38 +56,48 @@ public class UserServiceImpl implements UserService {
                .orElseThrow(() -> new NotFoundException("User not found with ID: " + userId));
           userRepo.deleteById(userId);
      }
-     
+
+//   ===================================================================================================================
+
      @Override
      public List<UserDTO> getAllUsers() {
           List<User> allUsers = userRepo.findAll();
           return modelMapper.map(allUsers, new TypeToken<List<UserDTO>>() {}.getType());
      }
+     
+//   ===================================================================================================================
 
      @Override
      public void updateUserStatusById(Long userId, String newStatus) {
+          // Check if id already exists
           userRepo.findById(userId)
                .orElseThrow(() -> new NotFoundException("User not found with ID: " + userId));
+          
+          // If exists, update the use status
           userRepo.updateUserStatusById(userId, newStatus);
      }
-     
-     public User registerUser(User user) {
+
+//   ===================================================================================================================
+
+     public void registerUser(UserDTO userDTO) {
+        
         // Check if email already exists
-        if (userRepo.existsByEmail(user.getEmail())) {
+        if (userRepo.existsByEmail(userDTO.getEmail())) {
             throw new RuntimeException("Email already registered");
         }
-     
+        
         // Encrypt password
 //      user.setPassword(passwordEncoder.encode(user.getPassword()));
      
         // Save user
-        User savedUser = userRepo.save(user);
+        saveUser(userDTO);
      
         // Send verification email
 //        emailService.sendVerificationEmail(user.getEmail(), user.getVerificationToken());
      
-        return user;
-        
      }
+
+//   ===================================================================================================================
 
 //     public boolean verifyUser(String token) {
 //        Optional<User> userOptional = userRepo.findByVerificationToken(token);
@@ -96,9 +112,13 @@ public class UserServiceImpl implements UserService {
 //        return false;
 //     }
 
+//   ===================================================================================================================
+
      public Optional<User> findByEmail(String email) {
           return userRepo.findByEmail(email);
      }
+     
+//   ===================================================================================================================
      
      public String generateVerificationOtp() {
           SecureRandom random = new SecureRandom();
@@ -106,8 +126,7 @@ public class UserServiceImpl implements UserService {
           return String.format("%06d", otpValue);
      }
      
+//   ===================================================================================================================
+
 }
-
-
-// ====================================================================================================================
 

@@ -2,7 +2,6 @@ package com.find4u.find4u2ndsemesterspringbootproject.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.*;
 
 @Getter
@@ -13,11 +12,9 @@ import lombok.*;
 
 public class RegistrationRequestDTO {
      @NotBlank(message = "First name is required")
-     @Size(max = 30)
      private String firstName;
      
      @NotBlank(message = "Last name is required")
-     @Size(max = 30)
      private String lastName;
      
      @NotBlank(message = "Email is required")
@@ -30,7 +27,7 @@ public class RegistrationRequestDTO {
      @NotBlank(message = "Password is required")
      private String password;
      
-     private boolean isAgreedTermsPolicy;
+     private boolean isAgreedTermsPolicy = false;
      
 }
 

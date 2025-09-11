@@ -2,6 +2,7 @@ package com.find4u.find4u2ndsemesterspringbootproject.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -32,10 +33,10 @@ public class UserDTO {
 
 //   ===================================================================================================================
      
-     private String role;  // 'user', 'admin'
-     private String status; // 'active', 'inactive'
-     private Boolean isVerified; // 'Yes', 'No'
-     private Boolean isAgreedTermsPolicy;
+     private String role = "user";  // 'user', 'admin'
+     private String status = "inactive"; // 'active', 'inactive'
+     private Boolean isVerified = false;
+     private Boolean isAgreedTermsPolicy = false;
 
 //   ===================================================================================================================
      
@@ -47,6 +48,18 @@ public class UserDTO {
      
      private LocalDateTime createdAt;
      private LocalDateTime updatedAt;
+     
+//   ===================================================================================================================
+     
+     public UserDTO(String firstName,String lastName, String email, String phone, String password, boolean agreedTermsPolicy) {
+          this.firstName = firstName;
+          this.lastName = lastName;
+          this.email = email;
+          this.phoneNumber = phone;
+          this.password = password;
+          this.isAgreedTermsPolicy = agreedTermsPolicy;
+          
+     }
 
 //   ===================================================================================================================
 

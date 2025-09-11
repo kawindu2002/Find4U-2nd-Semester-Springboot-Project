@@ -20,15 +20,12 @@ public interface UserService {
      
      void updateUserStatusById(Long userId, String newStatus);
      
-     User registerUser(User user);
+     void registerUser(UserDTO userDTO);
      
      Optional<User> findByEmail(String email);
      
      String generateVerificationOtp();
      
 }
-
-
-
 
 

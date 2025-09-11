@@ -1,48 +1,55 @@
 package com.find4u.find4u2ndsemesterspringbootproject.controller;
 
+import com.find4u.find4u2ndsemesterspringbootproject.dto.APIResponse;
+import com.find4u.find4u2ndsemesterspringbootproject.dto.RegistrationRequestDTO;
+import com.find4u.find4u2ndsemesterspringbootproject.dto.UserDTO;
 import com.find4u.find4u2ndsemesterspringbootproject.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("/api/v1/find4u/user")
+@RequestMapping("/api/v1/find4u/auth")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*")
 public class AuthController {
     
     private final UserService userService;
     
-//    @PostMapping("/register")
-//    public ResponseEntity<APIResponse> registerUser(@Valid @RequestBody RegistrationRequestDTO registrationRequest) {
-//        try {
-//            // Check if email already exists
-//            if (userService.findByEmail(registrationRequest.getEmail()).isPresent()) {
-//                return ResponseEntity.badRequest()
-//                     .body(new APIResponse(false, "Email already registered"));
-//            }
-//
-//            // Create user entity
-//            User user = new User(
-//                 registrationRequest.getFirstName(),
-//                 registrationRequest.getLastName(),
-//                 registrationRequest.getEmail(),
-//                 registrationRequest.getPhone(),
-//                 registrationRequest.getPassword()
-//            );
-//
-//            // Register user
-//            User registeredUser = userService.registerUser(user);
-//
-//            return ResponseEntity.ok()
-//                 .body(new AuthenticationResponse(true, "Registration successful. Please check your email to verify your account."));
-//        } catch (Exception e) {
-//            return ResponseEntity.badRequest()
-//                 .body(new AuthenticationResponse(false, "Registration failed: " + e.getMessage()));
-//        }
-//    }
-////
+//  ==================================================================================================================
+    
+    @PostMapping("/register")
+    public ResponseEntity<String> registerUser(@Valid @RequestBody RegistrationRequestDTO registrationRequestDto) {
+        // Check if email already exists
+        if (userService.findByEmail(registrationRequestDto.getEmail()).isPresent()) {
+            return ResponseEntity.badRequest().body("Email already registered");
+        }
+        
+        // Create user Dto
+        UserDTO userDto = new UserDTO(
+             registrationRequestDto.getFirstName(),
+             registrationRequestDto.getLastName(),
+             registrationRequestDto.getEmail(),
+             registrationRequestDto.getPhone(),
+             registrationRequestDto.getPassword(),
+             registrationRequestDto.isAgreedTermsPolicy()
+        );
+        
+        // Add verification otp to user
+        userDto.setVerificationOTP(userService.generateVerificationOtp());
+        
+        // Register user
+        userService.registerUser(userDto);
+        
+        return new ResponseEntity(new APIResponse(200, "Registration successful. Please check your email to verify your account. ", null), HttpStatus.OK);
+        
+        
+    }
+    
+//  ==================================================================================================================
+
 //    @GetMapping("/verify")
 //    public ResponseEntity<AuthenticationResponse> verifyUser(@RequestParam String token) {
 //        boolean isVerified = userService.verifyUser(token);
@@ -55,6 +62,9 @@ public class AuthController {
 //                 .body(new AuthenticationResponse(false, "Invalid verification token"));
 //        }
 //    }
-//
+
+//  ==================================================================================================================
+
+
 }
 

@@ -3,9 +3,7 @@ package com.find4u.find4u2ndsemesterspringbootproject.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.*;
-import java.util.UUID;
 
 import java.time.LocalDateTime;
 
@@ -71,8 +69,8 @@ public class User {
      @Column(name = "updated_at")
      private LocalDateTime updatedAt;
      
-// =====================================================================================================================
-
+//   ===================================================================================================================
+     
      @PrePersist
      protected void onCreate() {
           this.createdAt = LocalDateTime.now();
