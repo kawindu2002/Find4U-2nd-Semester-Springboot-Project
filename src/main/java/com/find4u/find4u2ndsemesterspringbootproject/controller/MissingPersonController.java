@@ -17,7 +17,9 @@ import java.util.List;
 public class MissingPersonController {
 
     private final MissingPersonService missingPersonService;
-    
+
+//  ==================================================================================================================
+
     // Save
     @PostMapping("save")
     public ResponseEntity<APIResponse> save(@RequestBody MissingPersonDTO missingPersonDTO) {
@@ -45,6 +47,8 @@ public class MissingPersonController {
         List<MissingPersonDTO> missingList = missingPersonService.getAllMissingPeople();
         return new ResponseEntity(new APIResponse(200, "Success", missingList), HttpStatus.OK);
     }
+    
+//  ==================================================================================================================
     
     // Change status (like MISSING → FOUND)
     @PatchMapping("{id}/status")

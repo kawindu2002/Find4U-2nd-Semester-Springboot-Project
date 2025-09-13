@@ -45,26 +45,23 @@ public class AuthController {
         
         return new ResponseEntity(new APIResponse(200, "Registration successful. Please check your email to verify your account. ", null), HttpStatus.OK);
         
-        
     }
     
 //  ==================================================================================================================
-
-//    @GetMapping("/verify")
-//    public ResponseEntity<AuthenticationResponse> verifyUser(@RequestParam String token) {
-//        boolean isVerified = userService.verifyUser(token);
-//
-//        if (isVerified) {
-//            return ResponseEntity.ok()
-//                 .body(new AuthenticationResponse(true, "Account verified successfully"));
-//        } else {
-//            return ResponseEntity.badRequest()
-//                 .body(new AuthenticationResponse(false, "Invalid verification token"));
-//        }
-//    }
-
+    
+    @GetMapping("/verify")
+    public ResponseEntity<APIResponse> verifyUser(@RequestParam String email, @RequestParam String otp) {
+        boolean isVerified = userService.verifyUser(email, otp);
+        
+        if (isVerified) {
+            return ResponseEntity.ok(new APIResponse(200, "Account verified successfully!", null));
+        } else {
+            return ResponseEntity.badRequest()
+                 .body(new APIResponse(400, "Invalid verification OTP", null));
+        }
+    }
+    
 //  ==================================================================================================================
-
 
 }
 

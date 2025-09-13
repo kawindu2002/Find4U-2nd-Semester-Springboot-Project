@@ -1,7 +1,7 @@
 package com.find4u.find4u2ndsemesterspringbootproject.service;
 
 public interface EmailService {
-     void sendVerificationEmail(String to, String token);
+//     void sendVerificationEmail(String to, String token);
      void sendVerificationOtp(String to, String otp);
 }
 

@@ -20,8 +20,8 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
      private final UserRepository userRepo;
      private final ModelMapper modelMapper;
-//   private PasswordEncoder passwordEncoder;
-     private EmailService emailService;
+//   private final PasswordEncoder passwordEncoder;
+     private final EmailService emailService;
      
 //   ===================================================================================================================
      
@@ -78,7 +78,8 @@ public class UserServiceImpl implements UserService {
      }
 
 //   ===================================================================================================================
-
+     
+     @Override
      public void registerUser(UserDTO userDTO) {
         
         // Check if email already exists
@@ -92,28 +93,35 @@ public class UserServiceImpl implements UserService {
         // Save user
         saveUser(userDTO);
      
-        // Send verification email
-//        emailService.sendVerificationEmail(user.getEmail(), user.getVerificationToken());
+        // Send verification email with otp
+        emailService.sendVerificationOtp(userDTO.getEmail(), userDTO.getVerificationOTP());
      
      }
 
 //   ===================================================================================================================
-
-//     public boolean verifyUser(String token) {
-//        Optional<User> userOptional = userRepo.findByVerificationToken(token);
-//
-//        if (userOptional.isPresent()) {
-//            User user = userOptional.get();
-//            user.setVerified(true);
-//            user.setVerificationToken(null); // Clear the token after verification
-//            userRepo.save(user);
-//            return true;
-//        }
-//        return false;
-//     }
-
+     
+     @Override
+     public boolean verifyUser(String email,String otp) {
+        
+        Optional<User> userOptional = findByEmail(email);
+          
+          if (userOptional.isPresent()) {
+            User user = userOptional.get();
+             if(user.getVerificationOtp().equals(otp)) {
+                  user.setIsVerified(true);
+                  user.setStatus("active");
+                  // Clear the otp after verification
+                  user.setVerificationOtp(null);
+                  userRepo.save(user);
+                  return true;
+             }
+        }
+        return false;
+     }
+     
 //   ===================================================================================================================
-
+     
+     @Override
      public Optional<User> findByEmail(String email) {
           return userRepo.findByEmail(email);
      }
