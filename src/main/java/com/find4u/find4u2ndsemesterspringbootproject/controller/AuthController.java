@@ -1,6 +1,7 @@
 package com.find4u.find4u2ndsemesterspringbootproject.controller;
 
 import com.find4u.find4u2ndsemesterspringbootproject.dto.APIResponse;
+import com.find4u.find4u2ndsemesterspringbootproject.dto.AuthRequestDTO;
 import com.find4u.find4u2ndsemesterspringbootproject.dto.RegistrationRequestDTO;
 import com.find4u.find4u2ndsemesterspringbootproject.dto.UserDTO;
 import com.find4u.find4u2ndsemesterspringbootproject.service.UserService;
@@ -8,6 +9,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,6 +19,9 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
     
     private final UserService userService;
+    private final JwtUtil jwtUtil;
+    private final AuthenticationManager authenticationManager;
+    private final UserDetailsService userDetailsService;
     
 //  ==================================================================================================================
     
@@ -64,31 +69,15 @@ public class AuthController {
     
     
 //  ==================================================================================================================
-
-}
-
-
-
-
-@RestController
-@RequestMapping("/auth")
-@RequiredArgsConstructor
-public class AuthController {
-    private final UserService userService;
-    private final JwtUtil jwtUtil;
-    private final AuthenticationManager authenticationManager;
-    private final UserDetailsService userDetailsService;
     
-
-
     @PostMapping("/login")
-    public ResponseEntity<APIResponse> login(@RequestBody AuthRequest authRequest) {
+    public ResponseEntity<APIResponse> login(@RequestBody AuthRequestDTO authRequestDTO) {
         try {
             authenticationManager.authenticate(
-                 new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword())
+                 new UsernamePasswordAuthenticationToken(authRequestDTO.getEmail(), authRequestDTO.getPassword())
             );
             
-            final UserDetails userDetails = userDetailsService.loadUserByUsername(authRequest.getEmail());
+            final UserDetails userDetails = userDetailsService.loadUserByUsername(authRequestDTO.getEmail());
             final String jwt = jwtUtil.generateToken(userDetails.getUsername());
             
             return ResponseEntity.ok(new APIResponse(200, "Login successful", jwt));
@@ -96,3 +85,8 @@ public class AuthController {
             return ResponseEntity.badRequest().body(new APIResponse(400, "Invalid credentials", null));
         }
     }
+    
+//  ==================================================================================================================
+
+}
+
