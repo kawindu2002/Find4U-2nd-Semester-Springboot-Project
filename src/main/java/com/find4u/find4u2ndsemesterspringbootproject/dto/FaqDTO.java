@@ -7,6 +7,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@Data
 public class FaqDTO {
      private Long id;
      private String question;

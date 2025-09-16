@@ -12,6 +12,8 @@ import java.time.LocalDateTime;
 @Setter
 @Getter
 @ToString
+@Data
+
 public class UserDTO {
 
 //   ===================================================================================================================
