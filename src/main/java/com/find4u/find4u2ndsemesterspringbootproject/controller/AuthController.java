@@ -47,9 +47,10 @@ public class AuthController {
         
     }
     
+    
 //  ==================================================================================================================
     
-    @GetMapping("/verify")
+    @PostMapping("/verify")
     public ResponseEntity<APIResponse> verifyUser(@RequestParam String email, @RequestParam String otp) {
         boolean isVerified = userService.verifyUser(email, otp);
         
@@ -57,11 +58,41 @@ public class AuthController {
             return ResponseEntity.ok(new APIResponse(200, "Account verified successfully!", null));
         } else {
             return ResponseEntity.badRequest()
-                 .body(new APIResponse(400, "Invalid verification OTP", null));
+                 .body(new APIResponse(400, "Invalid verification OTP or email", null));
         }
     }
+    
     
 //  ==================================================================================================================
 
 }
 
+
+
+
+@RestController
+@RequestMapping("/auth")
+@RequiredArgsConstructor
+public class AuthController {
+    private final UserService userService;
+    private final JwtUtil jwtUtil;
+    private final AuthenticationManager authenticationManager;
+    private final UserDetailsService userDetailsService;
+    
+
+
+    @PostMapping("/login")
+    public ResponseEntity<APIResponse> login(@RequestBody AuthRequest authRequest) {
+        try {
+            authenticationManager.authenticate(
+                 new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword())
+            );
+            
+            final UserDetails userDetails = userDetailsService.loadUserByUsername(authRequest.getEmail());
+            final String jwt = jwtUtil.generateToken(userDetails.getUsername());
+            
+            return ResponseEntity.ok(new APIResponse(200, "Login successful", jwt));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(new APIResponse(400, "Invalid credentials", null));
+        }
+    }

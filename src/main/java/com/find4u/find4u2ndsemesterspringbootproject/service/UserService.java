@@ -26,8 +26,6 @@ public interface UserService {
      
      String generateVerificationOtp();
      
-//     public boolean verifyUser(String otp);
      boolean verifyUser(String email,String otp);
 }
-
 

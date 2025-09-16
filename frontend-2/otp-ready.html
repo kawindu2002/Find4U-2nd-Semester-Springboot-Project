@@ -594,10 +594,10 @@
                         submitBtn.html('<span class="loading-spinner me-2"></span> Verifying...');
                         submitBtn.prop('disabled', true);
 
-                        // API call to verify OTP - using GET with query parameters
+                        // API call to verify OTP - using POST with query parameters
                         $.ajax({
                                 url: 'http://localhost:8080/api/v1/find4u/auth/verify', // API endpoint
-                                method: 'GET',
+                                method: 'POST',
                                 data: {
                                         email: email,
                                         otp: otpCode
