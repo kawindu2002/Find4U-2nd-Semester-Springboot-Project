@@ -9,9 +9,15 @@ import com.find4u.find4u2ndsemesterspringbootproject.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,7 +26,7 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
      private final UserRepository userRepo;
      private final ModelMapper modelMapper;
-//   private final PasswordEncoder passwordEncoder;
+   private final PasswordEncoder passwordEncoder;
      private final EmailService emailService;
      
 //   ===================================================================================================================
@@ -88,7 +94,7 @@ public class UserServiceImpl implements UserService {
         }
         
         // Encrypt password
-//      user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
      
         // Save user
         saveUser(userDTO);
@@ -137,4 +143,5 @@ public class UserServiceImpl implements UserService {
 //   ===================================================================================================================
 
 }
+
 
