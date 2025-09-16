@@ -5,11 +5,15 @@ import com.find4u.find4u2ndsemesterspringbootproject.dto.AuthRequestDTO;
 import com.find4u.find4u2ndsemesterspringbootproject.dto.RegistrationRequestDTO;
 import com.find4u.find4u2ndsemesterspringbootproject.dto.UserDTO;
 import com.find4u.find4u2ndsemesterspringbootproject.service.UserService;
+import com.find4u.find4u2ndsemesterspringbootproject.util.JwtUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
