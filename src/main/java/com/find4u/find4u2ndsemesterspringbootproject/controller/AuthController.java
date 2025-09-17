@@ -5,15 +5,9 @@ import com.find4u.find4u2ndsemesterspringbootproject.dto.AuthRequestDTO;
 import com.find4u.find4u2ndsemesterspringbootproject.dto.RegistrationRequestDTO;
 import com.find4u.find4u2ndsemesterspringbootproject.dto.UserDTO;
 import com.find4u.find4u2ndsemesterspringbootproject.service.UserService;
-import com.find4u.find4u2ndsemesterspringbootproject.util.JwtUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -23,17 +17,17 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
     
     private final UserService userService;
-    private final JwtUtil jwtUtil;
-    private final AuthenticationManager authenticationManager;
-    private final UserDetailsService userDetailsService;
-    
+
 //  ==================================================================================================================
     
     @PostMapping("/register")
-    public ResponseEntity<String> registerUser(@Valid @RequestBody RegistrationRequestDTO registrationRequestDto) {
+    public ResponseEntity<APIResponse> registerUser(@Valid @RequestBody RegistrationRequestDTO registrationRequestDto) {
         // Check if email already exists
         if (userService.findByEmail(registrationRequestDto.getEmail()).isPresent()) {
-            return ResponseEntity.badRequest().body("Email already registered");
+            return ResponseEntity
+                 .badRequest()
+                 .body(new APIResponse(400, "Email already registered", null));
+            
         }
         
         // Create user Dto
@@ -50,12 +44,10 @@ public class AuthController {
         userDto.setVerificationOTP(userService.generateVerificationOtp());
         
         // Register user
-        userService.registerUser(userDto);
-        
-        return new ResponseEntity(new APIResponse(200, "Registration successful. Please check your email to verify your account. ", null), HttpStatus.OK);
+        return ResponseEntity.ok(new APIResponse(200, userService.registerUser(userDto), null));
         
     }
-    
+
 //  ==================================================================================================================
     
     @PostMapping("/verify")
@@ -69,26 +61,15 @@ public class AuthController {
                  .body(new APIResponse(400, "Invalid verification OTP or email", null));
         }
     }
-    
-    
+
 //  ==================================================================================================================
     
     @PostMapping("/login")
     public ResponseEntity<APIResponse> login(@RequestBody AuthRequestDTO authRequestDTO) {
-        try {
-            authenticationManager.authenticate(
-                 new UsernamePasswordAuthenticationToken(authRequestDTO.getEmail(), authRequestDTO.getPassword())
-            );
-            
-            final UserDetails userDetails = userDetailsService.loadUserByUsername(authRequestDTO.getEmail());
-            final String jwt = jwtUtil.generateToken(userDetails.getUsername());
-            
-            return ResponseEntity.ok(new APIResponse(200, "Login successful", jwt));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(new APIResponse(400, "Invalid credentials", null));
-        }
+        return ResponseEntity.ok(new APIResponse(200, "Account verified successfully!", userService.loginUser(authRequestDTO)));
+   
     }
-    
+
 //  ==================================================================================================================
 
 }

@@ -602,10 +602,6 @@
                                         email: email,
                                         otp: otpCode
                                 },
-                                beforeSend: function(xhr) {
-                                        // Set authorization header if needed
-                                        // xhr.setRequestHeader('Authorization', 'Bearer ' + localStorage.getItem('token'));
-                                },
                                 success: function(response) {
                                         // Handle success response based on your API structure
                                         if (response.status === 200) {

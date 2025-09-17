@@ -43,7 +43,7 @@ public class UserController {
     public ResponseEntity<List<UserDTO>> getAll() {
         return ResponseEntity.ok(userService.getAllUsers());
     }
-    
+
 //  ==================================================================================================================
     
     //  Change status (like ACTIVE → INACTIVE)
@@ -52,7 +52,7 @@ public class UserController {
         userService.updateUserStatusById(id, status);
         return ResponseEntity.ok("Status updated to: " + status);
     }
-    
+
 //  ==================================================================================================================
 
 }
